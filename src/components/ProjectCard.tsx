@@ -5,7 +5,9 @@ import Link from "next/link"
 import type { Project } from "@/data/projects"
 import { getAspectRatioCSS } from "@/data/projects"
 
-const hoverEase = "cubic-bezier(0.22, 0.61, 0.36, 1)"
+const hoverEase = "cubic-bezier(0.215, 0.61, 0.355, 1)"
+
+let activePreviewVideo: HTMLVideoElement | null = null
 
 export default function ProjectCard({
   project,
@@ -13,6 +15,7 @@ export default function ProjectCard({
   project: Project
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const isHoveredRef = useRef(false)
   const [isHovered, setIsHovered] = useState(false)
   const [coverError, setCoverError] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
@@ -23,20 +26,34 @@ export default function ProjectCard({
 
   const handleMouseEnter = useCallback(() => {
     const video = videoRef.current
-    if (video && videoReady) {
-      video.currentTime = 0
-      video.play()
-    }
     setIsHovered(true)
+
+    if (!video || !videoReady) return
+
+    if (activePreviewVideo && activePreviewVideo !== video) {
+      activePreviewVideo.pause()
+      activePreviewVideo.currentTime = 0
+    }
+
+    activePreviewVideo = video
+    isHoveredRef.current = true
+    video.currentTime = 0
+    video.play().catch(() => {})
   }, [videoReady])
 
   const handleMouseLeave = useCallback(() => {
     const video = videoRef.current
-    if (video) {
-      video.pause()
-      video.currentTime = 0
-    }
     setIsHovered(false)
+    isHoveredRef.current = false
+
+    if (!video) return
+
+    video.pause()
+    video.currentTime = 0
+
+    if (activePreviewVideo === video) {
+      activePreviewVideo = null
+    }
   }, [])
 
   return (
