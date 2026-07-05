@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/_next/",
       },
     ],
-    sitemap: "https://portfolio-pi-ten-qdkwchfpk5.vercel.app/sitemap.xml",
+    sitemap: "https://kuspik.vercel.app/sitemap.xml",
   }
 }
