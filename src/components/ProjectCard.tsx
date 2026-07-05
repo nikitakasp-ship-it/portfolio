@@ -15,18 +15,14 @@ export default function ProjectCard({
   project: Project
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const isHoveredRef = useRef(false)
   const [isHovered, setIsHovered] = useState(false)
   const [coverError, setCoverError] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
 
   const aspectCSS = getAspectRatioCSS(project.aspectRatio)
-  const hasCover = project.cover && !coverError
-  const canHover = project.previewVideo && videoReady
-  const overlayVisible = isHovered && canHover
-  const overlayTransition = overlayVisible
-    ? `opacity 300ms ${hoverEase} 150ms, transform 300ms ${hoverEase} 150ms`
-    : `opacity 200ms ${hoverEase}, transform 200ms ${hoverEase}`
+  const hasCover = !!project.cover && !coverError
+  const hasVideo = !!project.previewVideo
+  const overlayVisible = isHovered && videoReady
 
   const handleMouseEnter = useCallback(() => {
     const video = videoRef.current
@@ -40,7 +36,6 @@ export default function ProjectCard({
     }
 
     activePreviewVideo = video
-    isHoveredRef.current = true
     video.currentTime = 0
     video.play().catch(() => {})
   }, [videoReady])
@@ -48,7 +43,6 @@ export default function ProjectCard({
   const handleMouseLeave = useCallback(() => {
     const video = videoRef.current
     setIsHovered(false)
-    isHoveredRef.current = false
 
     if (!video) return
 
@@ -61,10 +55,7 @@ export default function ProjectCard({
   }, [])
 
   return (
-    <Link
-      href={`/projects/${project.slug}`}
-      style={{ cursor: "pointer" }}
-    >
+    <Link href={`/projects/${project.slug}`} style={{ cursor: "pointer" }}>
       <div
         className="relative overflow-hidden"
         style={{
@@ -84,67 +75,7 @@ export default function ProjectCard({
             viewTransitionName: `project-${project.slug}`,
           } as React.CSSProperties}
         >
-          {hasCover ? (
-            <img
-              src={project.cover}
-              alt={project.title}
-              loading="lazy"
-              draggable={false}
-              onError={() => setCoverError(true)}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                opacity: isHovered && canHover ? 0 : 1,
-                transform: `scale(${isHovered ? 1.035 : 1})`,
-                transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "32px",
-                opacity: isHovered && canHover ? 0 : 1,
-                transform: `scale(${isHovered ? 1.035 : 1})`,
-                transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
-              }}
-            >
-              <div style={{ textAlign: "center" }}>
-                <span
-                  style={{
-                    display: "block",
-                    fontWeight: 700,
-                    marginBottom: "8px",
-                    fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
-                    color: "var(--text-primary)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {project.title}
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 500,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "var(--text-secondary)",
-                  }}
-                >
-                  {project.category}
-                </span>
-              </div>
-            </div>
-          )}
-
-          {project.previewVideo && (
+          {hasVideo && (
             <video
               ref={videoRef}
               src={project.previewVideo}
@@ -159,7 +90,24 @@ export default function ProjectCard({
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                opacity: isHovered && canHover ? 1 : 0,
+              }}
+            />
+          )}
+
+          {hasCover && (
+            <img
+              src={project.cover}
+              alt={project.title}
+              loading="lazy"
+              draggable={false}
+              onError={() => setCoverError(true)}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: overlayVisible ? 0 : 1,
                 transform: `scale(${isHovered ? 1.035 : 1})`,
                 transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
               }}
@@ -189,7 +137,9 @@ export default function ProjectCard({
               pointerEvents: "none",
               opacity: overlayVisible ? 1 : 0,
               transform: `translateY(${overlayVisible ? 0 : "12px"})`,
-              transition: overlayTransition,
+              transition: overlayVisible
+                ? `opacity 300ms ${hoverEase} 150ms, transform 300ms ${hoverEase} 150ms`
+                : `opacity 200ms ${hoverEase}, transform 200ms ${hoverEase}`,
             }}
           >
             <p
