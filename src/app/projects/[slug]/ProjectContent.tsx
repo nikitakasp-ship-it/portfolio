@@ -59,6 +59,7 @@ function VideoPlayer({
       style={{
         borderRadius: "12px",
         overflow: "hidden",
+        border: "1px solid var(--border)",
         lineHeight: 0,
         aspectRatio: aspectCSS,
         ...(viewTransitionName ? { viewTransitionName } as React.CSSProperties : {}),
