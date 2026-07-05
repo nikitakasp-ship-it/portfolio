@@ -213,7 +213,6 @@ export const projects: Project[] = [
     color: "#0f3460",
     technologies: ["Cinema 4D", "Redshift", "Midjourney", "ChatGPT"],
     featured: true,
-    gridPosition: "left",
   },
   {
     id: "nadi",
