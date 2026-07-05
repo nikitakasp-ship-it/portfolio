@@ -8,6 +8,7 @@ export default function ProjectGrid() {
       style={{
         gridTemplateColumns: "repeat(3, 1fr)",
         gridAutoFlow: "dense",
+        alignItems: "start",
       }}
     >
       {projects

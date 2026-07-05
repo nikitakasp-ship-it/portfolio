@@ -24,10 +24,10 @@ export const aspectRatioColSpan: Record<string, number> = {
   "16:9": 2,
   "4:3": 2,
   "3:2": 2,
-  "1:1": 1,
+  "9:16": 2,
   "4:5": 1,
   "3:4": 1,
-  "9:16": 1,
+  "1:1": 1,
 }
 
 export function getAspectRatioCSS(ratio: string): string {
