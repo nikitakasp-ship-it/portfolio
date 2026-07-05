@@ -37,10 +37,11 @@ const en: TranslationMap = {
     learning: "Currently Learning",
   },
   contact: {
-    title: "Contact",
-    description: "Available for freelance projects, collaborations and full-time opportunities.",
+    headline: "Let's build something together.",
     email: "EMAIL",
     telegram: "TELEGRAM",
+    downloadCV: "Download CV",
+    linkedin: "LinkedIn",
   },
   footer: {
     copyright: "Nikita Kasperovich",
@@ -130,10 +131,11 @@ const ru: TranslationMap = {
     learning: "В процессе изучения",
   },
   contact: {
-    title: "Контакты",
-    description: "Открыт к фриланс-проектам, коллаборациям и предложениям о работе.",
+    headline: "Давайте создадим что-то вместе.",
     email: "ПОЧТА",
     telegram: "ТЕЛЕГРАМ",
+    downloadCV: "Скачать резюме",
+    linkedin: "LinkedIn",
   },
   footer: {
     copyright: "Никита Касперович",
