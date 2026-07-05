@@ -78,6 +78,7 @@ export const projects: Project[] = [
     thumbnail: "",
     cover: "",
     gallery: [],
+    video: "/projects/obsidian-oni/preview.mp4",
     aspectRatio: "16:9",
     overview: {
       en: "A cinematic character animation study focused on mood, lighting, and storytelling through motion. Built entirely in Cinema 4D with Redshift.",
@@ -101,6 +102,7 @@ export const projects: Project[] = [
     thumbnail: "",
     cover: "",
     gallery: [],
+    video: "/projects/jdm/preview.mp4",
     aspectRatio: "21:9",
     overview: {
       en: "Automotive motion design project showcasing car culture through dynamic 3D animation, lighting, and cinematic camera work.",
@@ -124,6 +126,7 @@ export const projects: Project[] = [
     thumbnail: "",
     cover: "",
     gallery: [],
+    video: "/projects/dexter/preview.mp4",
     aspectRatio: "1:1",
     overview: {
       en: "Exploration of AI-driven digital human technology. Combining 3D character workflows with AI tools to create a believable digital avatar.",
