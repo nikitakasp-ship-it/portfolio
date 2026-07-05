@@ -1,12 +1,5 @@
 import ProjectCard from "./ProjectCard"
-import { projects, colSpan, videoAspectColSpan } from "@/data/projects"
-
-function getColSpan(project: { layout: string; videoAspect?: string }): string {
-  if (project.videoAspect && videoAspectColSpan[project.videoAspect]) {
-    return videoAspectColSpan[project.videoAspect]
-  }
-  return colSpan[project.layout as keyof typeof colSpan] || "span 1"
-}
+import { projects, getColSpan } from "@/data/projects"
 
 export default function ProjectGrid() {
   return (
@@ -24,7 +17,7 @@ export default function ProjectGrid() {
             key={project.slug}
             className="w-full"
             style={{
-              gridColumn: getColSpan(project),
+              gridColumn: `span ${getColSpan(project.aspectRatio)}`,
             }}
           >
             <ProjectCard project={project} />

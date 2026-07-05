@@ -1,10 +1,10 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/lib/use-scroll-animation"
 import type { Project } from "@/data/projects"
-import { layoutAspect, layoutMinHeight } from "@/data/projects"
+import { getAspectRatioCSS } from "@/data/projects"
 
 export default function ProjectCard({
   project,
@@ -12,12 +12,31 @@ export default function ProjectCard({
   project: Project
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const [imgError, setImgError] = useState(false)
 
   useScrollAnimation(cardRef, 0, "top 90%")
 
-  const aspect = project.videoAspect || layoutAspect[project.layout] || "16/9"
-  const minH = layoutMinHeight[project.layout] || "auto"
+  const aspectCSS = getAspectRatioCSS(project.aspectRatio)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !project.video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [project.video])
+
   const imgSrc = project.thumbnail || project.cover
   const showImage = imgSrc && !imgError
 
@@ -30,14 +49,24 @@ export default function ProjectCard({
           borderRadius: "12px",
           background: project.color,
           border: "1px solid var(--border)",
-          minHeight: minH,
         }}
       >
         <div
           className="relative overflow-hidden w-full h-full"
-          style={{ aspectRatio: aspect }}
+          style={{ aspectRatio: aspectCSS }}
         >
-          {showImage ? (
+          {project.video ? (
+            <video
+              ref={videoRef}
+              src={project.video}
+              muted
+              loop
+              playsInline
+              preload="none"
+              poster={imgSrc || undefined}
+              className="w-full h-full object-cover"
+            />
+          ) : showImage ? (
             <img
               src={imgSrc}
               alt={project.title}

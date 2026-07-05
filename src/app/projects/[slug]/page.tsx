@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import gsap from "gsap"
-import { projects } from "@/data/projects"
+import { projects, getAspectRatioCSS } from "@/data/projects"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function ProjectPage() {
@@ -77,7 +77,7 @@ export default function ProjectPage() {
           <div
             className="overflow-hidden mb-20"
             style={{
-              aspectRatio: project.videoAspect || "16/9",
+              aspectRatio: getAspectRatioCSS(project.aspectRatio),
               borderRadius: "12px",
               background: project.color,
               border: "1px solid var(--border)",
