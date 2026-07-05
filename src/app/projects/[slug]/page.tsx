@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { projects } from "@/data/projects"
 import ProjectContent from "./ProjectContent"
 
 const siteUrl = "https://kuspik.vercel.app"
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }))
+  return projects.filter((p) => p.featured).map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({
@@ -14,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const project = projects.find((p) => p.slug === slug)
+  const project = projects.find((p) => p.slug === slug && p.featured)
 
   if (!project) {
     return {
@@ -55,5 +56,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+  const project = projects.find((p) => p.slug === slug && p.featured)
+  if (!project) notFound()
   return <ProjectContent slug={slug} />
 }

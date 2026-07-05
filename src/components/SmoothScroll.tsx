@@ -16,16 +16,32 @@ export default function SmoothScroll() {
     })
 
     let animId: number
+    let active = true
 
     function raf(time: number) {
+      if (!active) return
       lenis.raf(time)
       animId = requestAnimationFrame(raf)
     }
 
     animId = requestAnimationFrame(raf)
 
+    function onVisibility() {
+      if (document.hidden) {
+        active = false
+        cancelAnimationFrame(animId)
+      } else {
+        active = true
+        animId = requestAnimationFrame(raf)
+      }
+    }
+
+    document.addEventListener("visibilitychange", onVisibility)
+
     return () => {
+      active = false
       cancelAnimationFrame(animId)
+      document.removeEventListener("visibilitychange", onVisibility)
       lenis.destroy()
     }
   }, [])

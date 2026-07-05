@@ -16,8 +16,15 @@ const I18nContext = createContext<I18nContextType>({
   t: () => "",
 })
 
+function getInitialLocale(): Locale {
+  if (typeof window === "undefined") return "en"
+  const fromDOM = document.documentElement.lang
+  if (fromDOM === "ru") return "ru"
+  return "en"
+}
+
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("en")
+  const [locale, setLocale] = useState<Locale>(getInitialLocale)
 
   useEffect(() => {
     const saved = localStorage.getItem("locale") as Locale | null

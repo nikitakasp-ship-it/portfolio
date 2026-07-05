@@ -10,12 +10,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/workflow`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
   ]
 
-  const projectPages = projects.map((p) => ({
-    url: `${siteUrl}/projects/${p.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }))
+  const projectPages = projects
+    .filter((p) => p.featured)
+    .map((p) => ({
+      url: `${siteUrl}/projects/${p.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
 
   return [...staticPages, ...projectPages]
 }
