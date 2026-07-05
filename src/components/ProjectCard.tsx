@@ -23,6 +23,10 @@ export default function ProjectCard({
   const aspectCSS = getAspectRatioCSS(project.aspectRatio)
   const hasCover = project.cover && !coverError
   const canHover = project.previewVideo && videoReady
+  const overlayVisible = isHovered && canHover
+  const overlayTransition = overlayVisible
+    ? `opacity 300ms ${hoverEase} 150ms, transform 300ms ${hoverEase} 150ms`
+    : `opacity 200ms ${hoverEase}, transform 200ms ${hoverEase}`
 
   const handleMouseEnter = useCallback(() => {
     const video = videoRef.current
@@ -164,9 +168,11 @@ export default function ProjectCard({
               position: "absolute",
               inset: 0,
               pointerEvents: "none",
-              opacity: isHovered && canHover ? 1 : 0,
-              transition: `opacity 300ms ${hoverEase}`,
-              background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 40%, transparent 60%)",
+              opacity: overlayVisible ? 1 : 0,
+              transition: overlayVisible
+                ? `opacity 300ms ${hoverEase} 150ms`
+                : `opacity 200ms ${hoverEase}`,
+              background: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 50%)",
             }}
           />
 
@@ -176,11 +182,11 @@ export default function ProjectCard({
               bottom: 0,
               left: 0,
               right: 0,
-              padding: "36px",
+              padding: "40px",
               pointerEvents: "none",
-              opacity: isHovered && canHover ? 1 : 0,
-              transform: `translateY(${isHovered && canHover ? 0 : "12px"})`,
-              transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
+              opacity: overlayVisible ? 1 : 0,
+              transform: `translateY(${overlayVisible ? 0 : "12px"})`,
+              transition: overlayTransition,
             }}
           >
             <p
