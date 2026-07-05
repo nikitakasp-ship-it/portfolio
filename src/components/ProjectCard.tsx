@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/lib/use-scroll-animation"
 import type { Project } from "@/data/projects"
@@ -12,11 +12,14 @@ export default function ProjectCard({
   project: Project
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const [imgError, setImgError] = useState(false)
 
   useScrollAnimation(cardRef, 0, "top 90%")
 
   const aspect = project.videoAspect || layoutAspect[project.layout] || "16/9"
   const minH = layoutMinHeight[project.layout] || "auto"
+  const imgSrc = project.thumbnail || project.cover
+  const showImage = imgSrc && !imgError
 
   return (
     <Link href={`/projects/${project.slug}`}>
@@ -34,11 +37,12 @@ export default function ProjectCard({
           className="relative overflow-hidden w-full h-full"
           style={{ aspectRatio: aspect }}
         >
-          {project.thumbnail || project.cover ? (
+          {showImage ? (
             <img
-              src={project.thumbnail || project.cover}
+              src={imgSrc}
               alt={project.title}
               loading="lazy"
+              onError={() => setImgError(true)}
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
           ) : (
