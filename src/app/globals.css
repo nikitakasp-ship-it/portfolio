@@ -11,6 +11,7 @@
   --surface: #111111;
   --surface-alt: #0a0a0a;
   --card: #171717;
+  --nav-background: rgba(5, 5, 5, 0.72);
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
   --text-primary: #F4F4F4;
@@ -26,6 +27,7 @@
   --surface: #FFFFFF;
   --surface-alt: #F0F0EE;
   --card: #FFFFFF;
+  --nav-background: rgba(247, 247, 245, 0.72);
   --border: rgba(0, 0, 0, 0.08);
   --border-subtle: rgba(0, 0, 0, 0.04);
   --text-primary: #121212;

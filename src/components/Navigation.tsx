@@ -33,8 +33,9 @@ export default function Navigation() {
     <header
       className="fixed top-0 left-0 right-0 z-50"
       style={{
-        background: scrolled ? "var(--background)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
+        background: scrolled ? "var(--nav-background)" : "transparent",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
         borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
       }}
     >
