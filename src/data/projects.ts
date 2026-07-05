@@ -23,6 +23,7 @@ export interface Project {
   color: string
   technologies: string[]
   featured: boolean
+  gridPosition?: "full" | "left" | "right"
 }
 
 const ratios = mediaRatios as Record<string, Record<string, MediaInfo>>
@@ -71,6 +72,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects", "Midjourney", "ChatGPT"],
     featured: true,
+    gridPosition: "full",
   },
   {
     id: "playrix",
@@ -119,6 +121,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
+    gridPosition: "left",
   },
   {
     id: "obsidian-oni",
@@ -141,6 +144,7 @@ export const projects: Project[] = [
     color: "#16213e",
     technologies: ["Cinema 4D", "AI Rendering Tools"],
     featured: true,
+    gridPosition: "right",
   },
   {
     id: "trading-platform",
@@ -186,6 +190,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
+    gridPosition: "full",
   },
   {
     id: "dexter",

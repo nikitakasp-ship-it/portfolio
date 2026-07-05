@@ -156,13 +156,16 @@ html {
   scrollbar-width: none;
 }
 
-/* Project Grid — equal columns, media defines height */
+/* Project Grid — Editorial Layout */
 .project-grid {
   display: grid;
   gap: 48px 24px;
+  grid-auto-flow: dense;
+  align-items: start;
   grid-template-columns: 1fr;
 }
 
+/* Tablet */
 @media (min-width: 768px) {
   .project-grid {
     grid-template-columns: 1fr 1fr;
@@ -170,10 +173,38 @@ html {
   }
 }
 
+/* Desktop — asymmetric 3-column */
 @media (min-width: 1100px) {
   .project-grid {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 4fr 4fr 5fr;
     gap: 64px 28px;
+  }
+}
+
+/* Grid items — mobile (all span 1 column) */
+.project-grid-item {
+  grid-column: span 1;
+}
+
+/* Tablet — full items span 2 columns */
+@media (min-width: 768px) {
+  .project-grid-item--full {
+    grid-column: span 2;
+  }
+}
+
+/* Desktop — full items span all 3 columns */
+@media (min-width: 1100px) {
+  .project-grid-item--full {
+    grid-column: span 3;
+  }
+
+  .project-grid-item--left {
+    grid-column: span 2;
+  }
+
+  .project-grid-item--right {
+    grid-column: 2 / span 2;
   }
 }
 
