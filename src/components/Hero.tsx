@@ -11,30 +11,6 @@ export default function Hero() {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const indicatorRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      video.pause()
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.2 }
-    )
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -53,29 +29,14 @@ export default function Hero() {
       style={{
         minHeight: "100vh",
         padding: "0 40px 80px",
+        background: "var(--background)",
       }}
     >
-      <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="none"
-          poster="/images/showreel-poster.png"
-          className="w-full h-full object-cover"
-          onError={(e) => { (e.target as HTMLVideoElement).style.display = "none" }}
-        >
-          <source src="/videos/showreel.mp4" type="video/mp4" />
-        </video>
-      </div>
-
       <div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(var(--hero-overlay-rgb),0.03) 0%, rgba(var(--hero-overlay-rgb),0.12) 50%, rgba(var(--hero-overlay-rgb),0.35) 75%, rgba(var(--hero-overlay-rgb),0.7) 90%, var(--background) 100%)",
+            "radial-gradient(ellipse at 50% 30%, rgba(var(--hero-overlay-rgb),0.08) 0%, transparent 70%)",
         }}
       />
 
