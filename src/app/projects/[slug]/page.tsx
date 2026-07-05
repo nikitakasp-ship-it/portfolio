@@ -31,7 +31,7 @@ export default function ProjectPage() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {})
+          video.play()
         } else {
           video.pause()
         }

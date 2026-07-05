@@ -26,7 +26,7 @@ export default function ProjectCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {})
+          video.play()
         } else {
           video.pause()
         }
@@ -62,7 +62,7 @@ export default function ProjectCard({
               muted
               loop
               playsInline
-              preload="none"
+              preload="auto"
               poster={imgSrc || undefined}
               className="w-full h-full object-cover"
             />
