@@ -2,7 +2,6 @@
 
 import { useRef, useState, useCallback } from "react"
 import Link from "next/link"
-import { useScrollAnimation } from "@/lib/use-scroll-animation"
 import type { Project } from "@/data/projects"
 import { getAspectRatioCSS } from "@/data/projects"
 
@@ -13,15 +12,14 @@ export default function ProjectCard({
 }: {
   project: Project
 }) {
-  const cardRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [coverError, setCoverError] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
 
-  useScrollAnimation(cardRef, 0, "top 90%")
-
   const aspectCSS = getAspectRatioCSS(project.aspectRatio)
+  const hasCover = project.cover && !coverError
+  const canHover = project.previewVideo && videoReady
 
   const handleMouseEnter = useCallback(() => {
     const video = videoRef.current
@@ -41,21 +39,18 @@ export default function ProjectCard({
     setIsHovered(false)
   }, [])
 
-  const showFallback = !project.cover || coverError
-
   return (
     <Link
       href={`/projects/${project.slug}`}
       style={{ cursor: "pointer" }}
     >
       <div
-        ref={cardRef}
-        className="group relative overflow-hidden w-full h-full"
+        className="relative overflow-hidden"
         style={{
           borderRadius: "12px",
           background: project.color,
           border: "1px solid var(--border)",
-          transform: `scale(${isHovered ? 1.03 : 1})`,
+          transform: `scale(${isHovered ? 1.025 : 1})`,
           transition: `transform 300ms ${hoverEase}`,
         }}
         onMouseEnter={handleMouseEnter}
@@ -65,7 +60,7 @@ export default function ProjectCard({
           className="relative overflow-hidden"
           style={{ aspectRatio: aspectCSS }}
         >
-          {!showFallback && (
+          {hasCover ? (
             <img
               src={project.cover}
               alt={project.title}
@@ -78,14 +73,12 @@ export default function ProjectCard({
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                opacity: isHovered ? 0 : 1,
-                transform: `scale(${isHovered ? 1.04 : 1})`,
+                opacity: isHovered && canHover ? 0 : 1,
+                transform: `scale(${isHovered ? 1.035 : 1})`,
                 transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
               }}
             />
-          )}
-
-          {showFallback && !isHovered && (
+          ) : (
             <div
               style={{
                 position: "absolute",
@@ -93,18 +86,21 @@ export default function ProjectCard({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "24px",
-                opacity: isHovered ? 0 : 1,
-                transition: `opacity 300ms ${hoverEase}`,
+                padding: "32px",
+                opacity: isHovered && canHover ? 0 : 1,
+                transform: `scale(${isHovered ? 1.035 : 1})`,
+                transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
               }}
             >
-              <div style={{ textAlign: "center", color: "var(--overlay)" }}>
+              <div style={{ textAlign: "center" }}>
                 <span
                   style={{
                     display: "block",
                     fontWeight: 700,
                     marginBottom: "8px",
-                    fontSize: "clamp(1rem, 2vw, 1.5rem)",
+                    fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
+                    color: "var(--text-primary)",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   {project.title}
@@ -113,8 +109,9 @@ export default function ProjectCard({
                   style={{
                     fontSize: "0.75rem",
                     fontWeight: 500,
-                    letterSpacing: "0.1em",
+                    letterSpacing: "0.15em",
                     textTransform: "uppercase",
+                    color: "var(--text-secondary)",
                   }}
                 >
                   {project.category}
@@ -138,8 +135,8 @@ export default function ProjectCard({
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                opacity: isHovered ? 1 : 0,
-                transform: `scale(${isHovered ? 1.04 : 1})`,
+                opacity: isHovered && canHover ? 1 : 0,
+                transform: `scale(${isHovered ? 1.035 : 1})`,
                 transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
               }}
             />
@@ -150,7 +147,7 @@ export default function ProjectCard({
               position: "absolute",
               inset: 0,
               pointerEvents: "none",
-              opacity: isHovered ? 1 : 0,
+              opacity: isHovered && canHover ? 1 : 0,
               transition: `opacity 300ms ${hoverEase}`,
               background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 40%, transparent 60%)",
             }}
@@ -162,16 +159,16 @@ export default function ProjectCard({
               bottom: 0,
               left: 0,
               right: 0,
-              padding: "40px",
+              padding: "36px",
               pointerEvents: "none",
-              opacity: isHovered ? 1 : 0,
-              transform: `translateY(${isHovered ? 0 : "12px"})`,
+              opacity: isHovered && canHover ? 1 : 0,
+              transform: `translateY(${isHovered && canHover ? 0 : "12px"})`,
               transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
             }}
           >
             <p
               style={{
-                fontSize: "0.75rem",
+                fontSize: "0.7rem",
                 fontWeight: 500,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
