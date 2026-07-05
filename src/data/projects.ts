@@ -5,10 +5,12 @@ export interface Project {
   category: string
   year: string
   description: { en: string; ru: string }
-  thumbnail: string
   cover: string
-  gallery: string[]
-  video?: string
+  previewVideo?: string
+  heroVideo?: string
+  galleryImages: string[]
+  additionalVideos?: string[]
+  behindTheScenes?: string[]
   aspectRatio: string
   overview: { en: string; ru: string }
   credits?: string
@@ -47,14 +49,10 @@ export const projects: Project[] = [
       en: "AI-assisted product commercial for kitchen appliances",
       ru: "AI-ассистированный продакшн для кухонной техники",
     },
-    thumbnail: "/projects/demiand/gallery/01.webp",
-    cover: "/projects/demiand/cover.webp",
-    gallery: [
-      "/projects/demiand/gallery/01.webp",
-      "/projects/demiand/gallery/02.webp",
-      "/projects/demiand/gallery/03.webp",
-    ],
-    video: "/projects/demiand/preview.mp4",
+    cover: "",
+    previewVideo: "/projects/demiand/preview.mp4",
+    heroVideo: "/projects/demiand/preview.mp4",
+    galleryImages: [],
     aspectRatio: "21:9",
     overview: {
       en: "A recruitment design task exploring AI-assisted production for a kitchen appliance brand. Combining 3D product visualization with AI-generated assets to create a premium commercial spot.",
@@ -75,10 +73,10 @@ export const projects: Project[] = [
       en: "Cinematic character animation project",
       ru: "Кинематографичная анимация персонажа",
     },
-    thumbnail: "",
     cover: "",
-    gallery: [],
-    video: "/projects/obsidian-oni/preview.mp4",
+    previewVideo: "/projects/obsidian-oni/preview.mp4",
+    heroVideo: "/projects/obsidian-oni/preview.mp4",
+    galleryImages: [],
     aspectRatio: "16:9",
     overview: {
       en: "A cinematic character animation study focused on mood, lighting, and storytelling through motion. Built entirely in Cinema 4D with Redshift.",
@@ -96,13 +94,13 @@ export const projects: Project[] = [
     category: "Automotive Motion",
     year: "2025",
     description: {
-      en: "Automotive motion design project",
-      ru: "Автомобильный моушн-дизайн проект",
+      en: "Automotive motion design project showcasing car culture through dynamic 3D animation, lighting, and cinematic camera work.",
+      ru: "Автомобильный проект, демонстрирующий культуру машин через динамичную 3D-анимацию, освещение и кинематографичную работу камеры.",
     },
-    thumbnail: "",
     cover: "",
-    gallery: [],
-    video: "/projects/jdm/preview.mp4",
+    previewVideo: "/projects/jdm/preview.mp4",
+    heroVideo: "/projects/jdm/preview.mp4",
+    galleryImages: [],
     aspectRatio: "21:9",
     overview: {
       en: "Automotive motion design project showcasing car culture through dynamic 3D animation, lighting, and cinematic camera work.",
@@ -123,10 +121,10 @@ export const projects: Project[] = [
       en: "AI digital human / AI avatar project",
       ru: "AI цифровой человек / AI аватар",
     },
-    thumbnail: "",
     cover: "",
-    gallery: [],
-    video: "/projects/dexter/preview.mp4",
+    previewVideo: "/projects/dexter/preview.mp4",
+    heroVideo: "/projects/dexter/preview.mp4",
+    galleryImages: [],
     aspectRatio: "1:1",
     overview: {
       en: "Exploration of AI-driven digital human technology. Combining 3D character workflows with AI tools to create a believable digital avatar.",
@@ -144,9 +142,8 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    thumbnail: "",
     cover: "",
-    gallery: [],
+    galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
@@ -160,9 +157,8 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    thumbnail: "",
     cover: "",
-    gallery: [],
+    galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
@@ -176,9 +172,8 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    thumbnail: "",
     cover: "",
-    gallery: [],
+    galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
