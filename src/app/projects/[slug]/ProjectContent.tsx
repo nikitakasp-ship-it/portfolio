@@ -59,7 +59,6 @@ function VideoPlayer({
       style={{
         borderRadius: "12px",
         overflow: "hidden",
-        border: "1px solid var(--border)",
         lineHeight: 0,
         aspectRatio: aspectCSS,
         ...(viewTransitionName ? { viewTransitionName } as React.CSSProperties : {}),
@@ -77,7 +76,6 @@ function VideoPlayer({
           width: "100%",
           height: "100%",
           display: "block",
-          objectFit: "cover",
         }}
       />
     </div>
@@ -270,6 +268,7 @@ export default function ProjectContent({ slug }: { slug: string }) {
                     fontSize: "1.125rem",
                     color: "var(--text-secondary)",
                     lineHeight: "1.8",
+                    whiteSpace: "pre-line",
                   }}
                 >
                   {project.overview[locale]}

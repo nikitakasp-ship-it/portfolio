@@ -121,7 +121,6 @@ export default function ProjectCard({
               width: "100%",
               height: "100%",
               display: "block",
-              objectFit: "cover",
             }}
           />
         ) : (
@@ -155,9 +154,7 @@ export default function ProjectCard({
               : `opacity 250ms ${hoverEase}, transform 250ms ${hoverEase}`,
           }}
         >
-          <p className="project-card-category">{project.category}</p>
           <h3 className="project-card-title">{project.title}</h3>
-          <span className="project-card-year">{project.year}</span>
         </div>
       </div>
     </Link>

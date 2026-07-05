@@ -23,7 +23,6 @@ export interface Project {
   color: string
   technologies: string[]
   featured: boolean
-  gridPosition?: "full" | "left" | "right"
 }
 
 const ratios = mediaRatios as Record<string, Record<string, MediaInfo>>
@@ -72,7 +71,6 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects", "Midjourney", "ChatGPT"],
     featured: true,
-    gridPosition: "full",
   },
   {
     id: "playrix",
@@ -121,30 +119,28 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
-    gridPosition: "left",
   },
   {
     id: "obsidian-oni",
     slug: "obsidian-oni",
     title: "Obsidian Oni",
-    category: "Character Animation",
-    year: "2025",
+    category: "3D Character Animation • AI Rendering",
+    year: "2026",
     description: {
-      en: "Cinematic character animation project",
-      ru: "Кинематографичная анимация персонажа",
+      en: "A cinematic character exploration combining traditional 3D production with AI-assisted rendering. The project was created in Cinema 4D, where the character, composition, lighting, and animation were developed before being enhanced through an AI rendering pipeline to achieve a stylized cinematic aesthetic while preserving the original 3D direction.",
+      ru: "Кинематографичный персонаж, созданный в Cinema 4D с последующим AI-рендерингом для стилизованной кинематографичной эстетики.",
     },
     previewVideo: "/projects/obsidian-oni/preview.mp4",
     heroVideo: "/projects/obsidian-oni/preview.mp4",
     galleryImages: [],
     overview: {
-      en: "A cinematic character animation study focused on mood, lighting, and storytelling through motion. Built entirely in Cinema 4D with Redshift.",
-      ru: "Кинематографичное изучение анимации персонажа с фокусом на настроение, освещение и повествование через движение. Полностью создано в Cinema 4D с Redshift.",
+      en: "A cinematic character exploration combining traditional 3D production with AI-assisted rendering. The project was created in Cinema 4D, where the character, composition, lighting, and animation were developed before being enhanced through an AI rendering pipeline to achieve a stylized cinematic aesthetic while preserving the original 3D direction.\n\n• Character Design\n• 3D Animation\n• Lighting & Composition\n• AI-Assisted Rendering\n• Cinematic Look Development",
+      ru: "Кинематографичный персонаж, созданный в Cinema 4D с последующим AI-рендерингом для стилизованной кинематографичной эстетики.",
     },
     credits: "Personal project",
     color: "#16213e",
-    technologies: ["Cinema 4D", "Redshift"],
+    technologies: ["Cinema 4D", "AI Rendering Tools"],
     featured: true,
-    gridPosition: "right",
   },
   {
     id: "trading-platform",
@@ -190,7 +186,6 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
-    gridPosition: "full",
   },
   {
     id: "dexter",
