@@ -1,24 +1,17 @@
 import ProjectCard from "./ProjectCard"
-import { projects, getColSpan } from "@/data/projects"
+import { projects } from "@/data/projects"
 
 export default function ProjectGrid() {
   return (
-    <div
-      className="grid gap-6 md:gap-8"
-      style={{
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gridAutoFlow: "dense",
-        alignItems: "start",
-      }}
-    >
+    <div className="project-grid">
       {projects
         .filter((p) => p.featured)
         .map((project) => (
           <div
             key={project.slug}
-            className="w-full"
+            className="project-grid-item"
             style={{
-              gridColumn: `span ${getColSpan(project.aspectRatio)}`,
+              gridColumn: `var(--grid-span-${project.aspectRatio.replace(":", "-")})`,
             }}
           >
             <ProjectCard project={project} />

@@ -3,9 +3,6 @@
 import { useRef } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/lib/use-scroll-animation"
-import SmoothScroll from "@/components/SmoothScroll"
-import Navigation from "@/components/Navigation"
-import Footer from "@/components/Footer"
 import { useI18n } from "@/lib/i18n-context"
 
 const stepData = [
@@ -91,48 +88,43 @@ export default function WorkflowPage() {
   useScrollAnimation(titleRef, 0)
 
   return (
-    <>
-      <SmoothScroll />
-      <Navigation />
-      <main
-        id="main-content"
-        className="page-padding"
-        style={{
-          minHeight: "100vh",
-          background: "var(--background)",
-        }}
-      >
-        <div className="content-container">
-          <Link
-            href="/"
-            className="inline-block text-sm mb-24 transition-colors duration-300"
-            style={{ color: "var(--text-muted)" }}
-          >
-            &larr; {t("back")}
-          </Link>
+    <main
+      id="main-content"
+      className="page-padding"
+      style={{
+        minHeight: "100vh",
+        background: "var(--background)",
+      }}
+    >
+      <div className="content-container">
+        <Link
+          href="/"
+          className="inline-block text-sm mb-24 transition-colors duration-300"
+          style={{ color: "var(--text-muted)" }}
+        >
+          &larr; {t("back")}
+        </Link>
 
-          <h1
-            ref={titleRef}
-            className="font-bold mb-24"
-            style={{
-              fontSize: "clamp(2.5rem, 5vw, 4rem)",
-              letterSpacing: "-0.03em",
-              color: "var(--text-primary)",
-            }}
-          >
-            {t("workflow.title")}
-          </h1>
+        <h1
+          ref={titleRef}
+          className="font-bold mb-24"
+          style={{
+            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+            letterSpacing: "-0.03em",
+            color: "var(--text-primary)",
+          }}
+        >
+          {t("workflow.title")}
+        </h1>
 
-          <div className="max-w-3xl flex flex-col gap-0" style={{ borderLeft: "1px solid var(--border)" }}>
-            {stepData.map((step) => (
-              <div key={step.number} className="pl-8 md:pl-12">
-                <StepCard number={step.number} title={step.title} tools={step.tools} />
-              </div>
-            ))}
-          </div>
+        <div className="max-w-3xl flex flex-col gap-0" style={{ borderLeft: "1px solid var(--border)" }}>
+          {stepData.map((step) => (
+            <div key={step.number} className="pl-8 md:pl-12">
+              <StepCard number={step.number} title={step.title} tools={step.tools} />
+            </div>
+          ))}
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   )
 }

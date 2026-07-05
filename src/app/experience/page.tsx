@@ -3,9 +3,6 @@
 import { useRef } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/lib/use-scroll-animation"
-import SmoothScroll from "@/components/SmoothScroll"
-import Navigation from "@/components/Navigation"
-import Footer from "@/components/Footer"
 import { useI18n } from "@/lib/i18n-context"
 
 function ExperienceContent() {
@@ -216,12 +213,5 @@ function Divider() {
 }
 
 export default function ExperiencePage() {
-  return (
-    <>
-      <SmoothScroll />
-      <Navigation />
-      <ExperienceContent />
-      <Footer />
-    </>
-  )
+  return <ExperienceContent />
 }

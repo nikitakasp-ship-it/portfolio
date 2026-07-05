@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "./providers"
+import LayoutShell from "./LayoutShell"
 
 const siteUrl = "https://kuspik.vercel.app"
 
@@ -59,7 +60,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <Providers>
-          {children}
+          <LayoutShell>{children}</LayoutShell>
         </Providers>
       </body>
     </html>

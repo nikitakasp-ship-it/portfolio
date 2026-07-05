@@ -1,15 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n-context"
-import { useTheme } from "@/lib/theme-context"
+import LanguageSwitcher from "./LanguageSwitcher"
+import ThemeSwitcher from "./ThemeSwitcher"
 
 export default function Navigation() {
-  const { t, locale, setLocale } = useI18n()
-  const { theme, toggle } = useTheme()
+  const { t } = useI18n()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const navLinks = [
     { label: t("nav.work"), href: "/#work" },
@@ -29,6 +31,43 @@ export default function Navigation() {
     return () => { document.body.style.overflow = "" }
   }, [menuOpen])
 
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false)
+    menuButtonRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeMenu()
+        return
+      }
+
+      if (e.key === "Tab" && menuRef.current) {
+        const focusable = menuRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [menuOpen, closeMenu])
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50"
@@ -46,6 +85,7 @@ export default function Navigation() {
         <Link
           href="/"
           className="flex items-center justify-center w-10 h-10 rounded-full"
+          aria-label="NK — Go to homepage"
           style={{
             border: "1.5px solid var(--border)",
             letterSpacing: "0.15em",
@@ -57,7 +97,7 @@ export default function Navigation() {
           NK
         </Link>
 
-        <nav className="hidden md:flex items-center gap-10">
+        <nav className="hidden md:flex items-center gap-10" aria-label="Main navigation">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -71,36 +111,17 @@ export default function Navigation() {
         </nav>
 
         <div className="hidden md:flex items-center gap-6">
-          <button
-            onClick={() => setLocale(locale === "en" ? "ru" : "en")}
-            className="text-xs font-medium tracking-widest transition-colors duration-300"
-            style={{ color: "var(--text-muted)" }}
-            aria-label={`Switch to ${locale === "en" ? "Russian" : "English"}`}
-          >
-            <span style={{ color: locale === "en" ? "var(--text-primary)" : "var(--text-muted)" }}>
-              EN
-            </span>
-            <span style={{ color: "var(--border)", margin: "0 4px" }}> | </span>
-            <span style={{ color: locale === "ru" ? "var(--text-primary)" : "var(--text-muted)" }}>
-              RU
-            </span>
-          </button>
-
-          <button
-            onClick={toggle}
-            className="text-sm transition-colors duration-300"
-            style={{ color: "var(--text-muted)" }}
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button>
+          <LanguageSwitcher />
+          <ThemeSwitcher className="text-sm" />
         </div>
 
         <button
+          ref={menuButtonRef}
           className="md:hidden relative flex items-center justify-center"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           style={{ width: "44px", height: "44px" }}
         >
           <span
@@ -131,6 +152,8 @@ export default function Navigation() {
       </div>
 
       <div
+        ref={menuRef}
+        id="mobile-menu"
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
@@ -148,36 +171,16 @@ export default function Navigation() {
             href={link.href}
             className="text-3xl font-light transition-colors duration-300 nav-link"
             style={{ color: "var(--text-secondary)" }}
-            onClick={() => setMenuOpen(false)}
+            tabIndex={menuOpen ? 0 : -1}
+            onClick={closeMenu}
           >
             {link.label}
           </Link>
         ))}
 
         <div className="flex items-center gap-6 mt-8">
-          <button
-            onClick={() => setLocale(locale === "en" ? "ru" : "en")}
-            className="text-sm font-medium tracking-widest transition-colors duration-300"
-            style={{ color: "var(--text-muted)" }}
-            aria-label={`Switch to ${locale === "en" ? "Russian" : "English"}`}
-          >
-            <span style={{ color: locale === "en" ? "var(--text-primary)" : "var(--text-muted)" }}>
-              EN
-            </span>
-            <span style={{ color: "var(--border)", margin: "0 4px" }}> | </span>
-            <span style={{ color: locale === "ru" ? "var(--text-primary)" : "var(--text-muted)" }}>
-              RU
-            </span>
-          </button>
-
-          <button
-            onClick={toggle}
-            className="text-lg transition-colors duration-300"
-            style={{ color: "var(--text-muted)" }}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button>
+          <LanguageSwitcher className={menuOpen ? "" : "[&>button]:tabindex-[-1]"} />
+          <ThemeSwitcher className={`text-lg ${menuOpen ? "" : "[&>button]:tabindex-[-1]"}`} />
         </div>
       </div>
     </header>

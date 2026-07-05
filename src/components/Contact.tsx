@@ -5,7 +5,7 @@ import { useScrollAnimation } from "@/lib/use-scroll-animation"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function Contact() {
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
   const sectionRef = useRef<HTMLElement>(null)
 
   useScrollAnimation(sectionRef, 0.2)
@@ -15,23 +15,27 @@ export default function Contact() {
       label: t("contact.email"),
       href: "mailto:nikitakasp@gmail.com",
       text: "nikitakasp@gmail.com",
+      download: false,
     },
     {
       label: t("contact.telegram"),
       href: "https://t.me/Kuspik",
       text: "@Kuspik",
-    },
-    {
-      label: t("contact.downloadCV"),
-      href: "/cv.pdf",
-      text: `${t("contact.downloadCV")} →`,
-      download: true,
+      download: false,
     },
     {
       label: t("contact.linkedin"),
       href: "https://www.linkedin.com/in/nikitakasp",
       text: `LinkedIn →`,
+      download: false,
     },
+    // Uncomment when cv.pdf is added to public/
+    // {
+    //   label: t("contact.downloadCV"),
+    //   href: "/cv.pdf",
+    //   text: `${t("contact.downloadCV")} →`,
+    //   download: true,
+    // },
   ]
 
   return (

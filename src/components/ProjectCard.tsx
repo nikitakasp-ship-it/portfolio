@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import Link from "next/link"
 import type { Project } from "@/data/projects"
 import { getAspectRatioCSS } from "@/data/projects"
+import { easings } from "@/lib/motion"
 
-const hoverEase = "cubic-bezier(0.215, 0.61, 0.355, 1)"
+const hoverEase = easings.hover
 
 let activePreviewVideo: HTMLVideoElement | null = null
 
@@ -16,11 +17,31 @@ export default function ProjectCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const [shouldLoad, setShouldLoad] = useState(false)
 
   const aspectCSS = getAspectRatioCSS(project.aspectRatio)
   const hasVideo = !!project.previewVideo
 
-  const handleMouseEnter = useCallback(() => {
+  useEffect(() => {
+    if (!hasVideo || shouldLoad) return
+
+    const el = videoRef.current?.parentElement
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "200px" }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [hasVideo, shouldLoad])
+
+  const activatePreview = useCallback(() => {
     const video = videoRef.current
     setIsHovered(true)
 
@@ -36,7 +57,7 @@ export default function ProjectCard({
     video.play().catch(() => {})
   }, [])
 
-  const handleMouseLeave = useCallback(() => {
+  const deactivatePreview = useCallback(() => {
     const video = videoRef.current
     setIsHovered(false)
 
@@ -51,9 +72,13 @@ export default function ProjectCard({
   }, [])
 
   return (
-    <Link href={`/projects/${project.slug}`} style={{ cursor: "pointer" }}>
+    <Link
+      href={`/projects/${project.slug}`}
+      aria-label={`${project.title} — ${project.category} — ${project.year}`}
+      style={{ cursor: "pointer", display: "block" }}
+    >
       <div
-        className="relative overflow-hidden"
+        className="relative overflow-hidden project-card"
         style={{
           borderRadius: "12px",
           background: project.color,
@@ -61,8 +86,11 @@ export default function ProjectCard({
           transform: `scale(${isHovered ? 1.025 : 1})`,
           transition: `transform 300ms ${hoverEase}`,
         }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={activatePreview}
+        onMouseLeave={deactivatePreview}
+        onFocus={activatePreview}
+        onBlur={deactivatePreview}
+        tabIndex={0}
       >
         <div
           className="relative overflow-hidden"
@@ -74,11 +102,12 @@ export default function ProjectCard({
           {hasVideo && (
             <video
               ref={videoRef}
-              src={project.previewVideo}
+              src={shouldLoad ? project.previewVideo : undefined}
               muted
               loop
               playsInline
-              preload="metadata"
+              preload={shouldLoad ? "metadata" : "none"}
+              aria-hidden="true"
               style={{
                 position: "absolute",
                 inset: 0,

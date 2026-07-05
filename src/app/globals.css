@@ -91,6 +91,15 @@ button {
   border-radius: 2px;
 }
 
+.project-card:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 4px;
+}
+
+.project-card:focus:not(:focus-visible) {
+  outline: none;
+}
+
 ::selection {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -154,4 +163,60 @@ button {
 
 html {
   scrollbar-width: none;
+}
+
+/* Project Grid — Responsive Editorial Layout */
+.project-grid {
+  display: grid;
+  gap: 24px;
+  grid-auto-flow: dense;
+  align-items: start;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+/* Default spans — mobile (1 column, everything spans 1) */
+.project-grid-item {
+  grid-column: span 1;
+}
+
+/* Tablet spans (2 columns) */
+@media (min-width: 768px) {
+  :root {
+    --grid-span-21-9: span 2;
+    --grid-span-16-9: span 2;
+    --grid-span-4-3: span 2;
+    --grid-span-3-2: span 2;
+    --grid-span-9-16: span 2;
+    --grid-span-1-1: span 1;
+    --grid-span-4-5: span 1;
+    --grid-span-3-4: span 1;
+  }
+}
+
+/* Desktop spans (3 columns) */
+@media (min-width: 1024px) {
+  :root {
+    --grid-span-21-9: span 3;
+    --grid-span-16-9: span 2;
+    --grid-span-4-3: span 2;
+    --grid-span-3-2: span 2;
+    --grid-span-9-16: span 2;
+    --grid-span-1-1: span 1;
+    --grid-span-4-5: span 1;
+    --grid-span-3-4: span 1;
+  }
 }
