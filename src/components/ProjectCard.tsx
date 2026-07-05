@@ -34,9 +34,9 @@ export default function ProjectCard({
           className="relative overflow-hidden w-full h-full"
           style={{ aspectRatio: aspect }}
         >
-          {project.thumbnail ? (
+          {project.thumbnail || project.cover ? (
             <img
-              src={project.thumbnail}
+              src={project.thumbnail || project.cover}
               alt={project.title}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
