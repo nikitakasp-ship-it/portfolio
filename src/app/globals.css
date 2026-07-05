@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+:root,
+[data-theme="dark"] {
+  --background: #050505;
+  --surface: #111111;
+  --surface-alt: #0a0a0a;
+  --card: #171717;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --text-primary: #F4F4F4;
+  --text-secondary: #B5B5B5;
+  --text-muted: #7D7D7D;
+  --text-hover: #FFFFFF;
+  --overlay: rgba(255, 255, 255, 0.15);
+  --hero-overlay-rgb: 0, 0, 0;
+}
+
+[data-theme="light"] {
+  --background: #F7F7F5;
+  --surface: #FFFFFF;
+  --surface-alt: #F0F0EE;
+  --card: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --text-primary: #121212;
+  --text-secondary: #3A3A3A;
+  --text-muted: #6A6A6A;
+  --text-hover: #000000;
+  --overlay: rgba(0, 0, 0, 0.1);
+  --hero-overlay-rgb: 247, 247, 245;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-secondary: var(--surface);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --font-sans: "Inter", sans-serif;
+  --container-content: 1600px;
+}
+
+@utility content-container {
+  max-width: var(--container-content);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@utility section-padding {
+  padding: 160px 40px;
+}
+
+@utility page-padding {
+  padding: 160px 40px 120px;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] ::selection {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.nav-link:hover,
+.contact-link:hover {
+  color: var(--text-hover) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
