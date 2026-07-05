@@ -1,3 +1,11 @@
+import mediaRatios from "./media-ratios.json"
+
+export interface MediaInfo {
+  width: number
+  height: number
+  ratio: string
+}
+
 export interface Project {
   id: string
   slug: string
@@ -10,31 +18,36 @@ export interface Project {
   galleryImages: string[]
   additionalVideos?: string[]
   behindTheScenes?: string[]
-  aspectRatio: string
   overview: { en: string; ru: string }
   credits?: string
   color: string
   technologies: string[]
   featured: boolean
+  gridPosition?: "full" | "left" | "right"
 }
 
-export const aspectRatioColSpan: Record<string, number> = {
-  "21:9": 3,
-  "16:9": 2,
-  "4:3": 2,
-  "3:2": 2,
-  "9:16": 2,
-  "4:5": 1,
-  "3:4": 1,
-  "1:1": 1,
+const ratios = mediaRatios as Record<string, Record<string, MediaInfo>>
+
+export function getMediaInfo(
+  slug: string,
+  type: string = "preview"
+): MediaInfo | null {
+  const entry = ratios[slug]
+  if (entry?.[type]) return entry[type]
+  if (entry?.preview) return entry.preview
+  return null
 }
 
-export function getAspectRatioCSS(ratio: string): string {
-  return ratio.replace(":", "/")
+export function getMediaAspectCSS(slug: string, type: string = "preview"): string {
+  const info = getMediaInfo(slug, type)
+  if (info) return `${info.width} / ${info.height}`
+  return "16 / 9"
 }
 
-export function getColSpan(ratio: string): number {
-  return aspectRatioColSpan[ratio] || 2
+export function getMediaAspectRatio(slug: string, type: string = "preview"): number {
+  const info = getMediaInfo(slug, type)
+  if (info) return info.width / info.height
+  return 16 / 9
 }
 
 export const projects: Project[] = [
@@ -51,7 +64,6 @@ export const projects: Project[] = [
     previewVideo: "/projects/demiand/preview.mp4",
     heroVideo: "/projects/demiand/preview.mp4",
     galleryImages: [],
-    aspectRatio: "21:9",
     overview: {
       en: "A recruitment design task exploring AI-assisted production for a kitchen appliance brand. Combining 3D product visualization with AI-generated assets to create a premium commercial spot.",
       ru: "Дизайн-задание на рекрутинге, исследующее AI-ассистированный продакшн для бренда кухонной техники. Сочетание 3D-продакшена и AI-генерации для создания премиального коммерческого ролика.",
@@ -60,6 +72,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects", "Midjourney", "ChatGPT"],
     featured: true,
+    gridPosition: "full",
   },
   {
     id: "playrix",
@@ -76,7 +89,6 @@ export const projects: Project[] = [
     galleryImages: [],
     additionalVideos: [],
     behindTheScenes: [],
-    aspectRatio: "16:9",
     overview: {
       en: "Creation of animated mobile game advertisements as part of a Playrix Motion Designer test assignment. The project focused on building engaging UA creatives, combining fast-paced storytelling, UI animation, visual effects and gameplay presentation while following a production pipeline similar to commercial mobile advertising.",
       ru: "Создание анимированных рекламных мобильных игр в рамках тестового задания Playrix на позицию Motion Designer. Проект был сосредоточен на создании привлекательных UA-креативов, сочетая динамичный сторителлинг, UI-анимацию, визуальные эффекты и презентацию геймплея в рамках продакшн-пайплайна, аналогичного коммерческой мобильной рекламе.",
@@ -85,6 +97,7 @@ export const projects: Project[] = [
     color: "#1a2e1a",
     technologies: ["After Effects", "Cinema 4D", "Photoshop", "AI Tools"],
     featured: true,
+    gridPosition: "left",
   },
   {
     id: "mobile-device",
@@ -101,7 +114,6 @@ export const projects: Project[] = [
     galleryImages: [],
     additionalVideos: [],
     behindTheScenes: [],
-    aspectRatio: "16:9",
     overview: {
       en: "Personal commercial product animation created entirely in Cinema 4D. The project focuses on premium product presentation, realistic lighting, procedural animation and cinematic composition featuring a stylized character interacting with a mobile device.",
       ru: "Личный коммерческий продуктовый ролик, созданный полностью в Cinema 4D. Проект сосредоточен на премиальной подаче продукта, реалистичном освещении, процедурной анимации и кинематографичной композиции со стилизованным персонажем, взаимодействующим с мобильным устройством.",
@@ -110,6 +122,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
+    gridPosition: "left",
   },
   {
     id: "obsidian-oni",
@@ -124,7 +137,6 @@ export const projects: Project[] = [
     previewVideo: "/projects/obsidian-oni/preview.mp4",
     heroVideo: "/projects/obsidian-oni/preview.mp4",
     galleryImages: [],
-    aspectRatio: "16:9",
     overview: {
       en: "A cinematic character animation study focused on mood, lighting, and storytelling through motion. Built entirely in Cinema 4D with Redshift.",
       ru: "Кинематографичное изучение анимации персонажа с фокусом на настроение, освещение и повествование через движение. Полностью создано в Cinema 4D с Redshift.",
@@ -133,6 +145,7 @@ export const projects: Project[] = [
     color: "#16213e",
     technologies: ["Cinema 4D", "Redshift"],
     featured: true,
+    gridPosition: "right",
   },
   {
     id: "trading-platform",
@@ -148,7 +161,6 @@ export const projects: Project[] = [
     heroVideo: "/projects/trading-platform/preview.mp4",
     galleryImages: [],
     additionalVideos: [],
-    aspectRatio: "16:9",
     overview: {
       en: "Personal concept project exploring the visual language of modern trading platforms. The project combines cinematic motion design, UI presentation and product visualization to create a premium financial product experience.",
       ru: "Личный концепт-проект, исследующий визуальный язык современных торговых платформ. Проект сочетает кинематографичную моушн-графику, презентацию UI и продакшн продуктов для создания премиального финансового продукта.",
@@ -157,6 +169,7 @@ export const projects: Project[] = [
     color: "#0a1628",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
+    gridPosition: "right",
   },
   {
     id: "jdm",
@@ -171,7 +184,6 @@ export const projects: Project[] = [
     previewVideo: "/projects/jdm/preview.mp4",
     heroVideo: "/projects/jdm/preview.mp4",
     galleryImages: [],
-    aspectRatio: "21:9",
     overview: {
       en: "Creation of cinematic 3D environments and a modular asset library in Cinema 4D for a website dedicated to Japanese drift culture. The project focused on building reusable scenes, lighting setups, materials, and atmospheric compositions that reflected the aesthetics of modern JDM motorsport.",
       ru: "Создание кинематографичных 3D-сред и модульной библиотеки ассетов в Cinema 4D для сайта, посвящённого японской дрифт-культуре. Проект был сосредоточен на создании многоразовых сцен, настроек освещения, материалов и атмосферных композиций, отражающих эстетику современного JDM-автоспорта.",
@@ -180,6 +192,7 @@ export const projects: Project[] = [
     color: "#1a1a2e",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
+    gridPosition: "full",
   },
   {
     id: "dexter",
@@ -194,7 +207,6 @@ export const projects: Project[] = [
     previewVideo: "/projects/dexter/preview.mp4",
     heroVideo: "/projects/dexter/preview.mp4",
     galleryImages: [],
-    aspectRatio: "1:1",
     overview: {
       en: "Exploration of AI-driven digital human technology. Combining 3D character workflows with AI tools to create a believable digital avatar.",
       ru: "Исследование AI-управляемой технологии цифровых людей. Сочетание 3D-воркфлоу с AI-инструментами для создания реалистичного цифрового аватара.",
@@ -203,6 +215,7 @@ export const projects: Project[] = [
     color: "#0f3460",
     technologies: ["Cinema 4D", "Redshift", "Midjourney", "ChatGPT"],
     featured: true,
+    gridPosition: "left",
   },
   {
     id: "nadi",
@@ -212,7 +225,6 @@ export const projects: Project[] = [
     year: "2026",
     description: { en: "", ru: "" },
     galleryImages: [],
-    aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
     featured: false,
@@ -226,7 +238,6 @@ export const projects: Project[] = [
     year: "2026",
     description: { en: "", ru: "" },
     galleryImages: [],
-    aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
     featured: false,
@@ -240,7 +251,6 @@ export const projects: Project[] = [
     year: "2026",
     description: { en: "", ru: "" },
     galleryImages: [],
-    aspectRatio: "16:9",
     technologies: [],
     color: "#1a1a2e",
     featured: false,

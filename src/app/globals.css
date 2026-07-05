@@ -91,15 +91,6 @@ button {
   border-radius: 2px;
 }
 
-.project-card:focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 4px;
-}
-
-.project-card:focus:not(:focus-visible) {
-  outline: none;
-}
-
 ::selection {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -165,58 +156,195 @@ html {
   scrollbar-width: none;
 }
 
-/* Project Grid — Responsive Editorial Layout */
+/* Project Grid — Editorial Layout */
 .project-grid {
   display: grid;
-  gap: 24px;
+  gap: 48px 24px;
   grid-auto-flow: dense;
   align-items: start;
   grid-template-columns: 1fr;
 }
 
+/* Tablet */
 @media (min-width: 768px) {
   .project-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px 28px;
   }
 }
 
-@media (min-width: 1024px) {
+/* Desktop — asymmetric 3-column */
+@media (min-width: 1100px) {
   .project-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: 4fr 4fr 5fr;
+    gap: 64px 28px;
   }
 }
 
-/* Default spans — mobile (1 column, everything spans 1) */
+/* Grid items — mobile (all span 1 column) */
 .project-grid-item {
   grid-column: span 1;
 }
 
-/* Tablet spans (2 columns) */
+/* Tablet — full items span 2 columns */
 @media (min-width: 768px) {
-  :root {
-    --grid-span-21-9: span 2;
-    --grid-span-16-9: span 2;
-    --grid-span-4-3: span 2;
-    --grid-span-3-2: span 2;
-    --grid-span-9-16: span 2;
-    --grid-span-1-1: span 1;
-    --grid-span-4-5: span 1;
-    --grid-span-3-4: span 1;
+  .project-grid-item--full {
+    grid-column: span 2;
   }
 }
 
-/* Desktop spans (3 columns) */
-@media (min-width: 1024px) {
-  :root {
-    --grid-span-21-9: span 3;
-    --grid-span-16-9: span 2;
-    --grid-span-4-3: span 2;
-    --grid-span-3-2: span 2;
-    --grid-span-9-16: span 2;
-    --grid-span-1-1: span 1;
-    --grid-span-4-5: span 1;
-    --grid-span-3-4: span 1;
+/* Desktop — full items span all 3 columns */
+@media (min-width: 1100px) {
+  .project-grid-item--full {
+    grid-column: span 3;
   }
+
+  .project-grid-item--left {
+    grid-column: span 2;
+  }
+
+  .project-grid-item--right {
+    grid-column: 2 / span 2;
+  }
+}
+
+/* Project Card */
+.project-card {
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-card:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
+.project-card:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Card media — video defines the frame */
+.project-card-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface);
+  line-height: 0;
+}
+
+/* Placeholder when no video */
+.project-card-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  text-align: center;
+  min-height: 240px;
+}
+
+.project-card-placeholder-title {
+  display: block;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.project-card-placeholder-category {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Hover overlay */
+.project-card-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    transparent 70%
+  );
+}
+
+/* Hover info — bottom left */
+.project-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  pointer-events: none;
+}
+
+.project-card-category {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 6px;
+}
+
+.project-card-title {
+  font-size: clamp(1rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.015em;
+  margin-bottom: 4px;
+}
+
+.project-card-year {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Card meta — below video */
+.project-card-meta {
+  padding: 16px 0 0;
+}
+
+.project-card-meta-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.project-card-meta-year {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.project-card-meta-sep {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.project-card-meta-category {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.project-card-meta-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
 }

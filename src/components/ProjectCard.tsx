@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback, useEffect } from "react"
 import Link from "next/link"
 import type { Project } from "@/data/projects"
-import { getAspectRatioCSS } from "@/data/projects"
+import { getMediaAspectCSS } from "@/data/projects"
 import { easings } from "@/lib/motion"
 
 const hoverEase = easings.hover
@@ -16,11 +16,14 @@ export default function ProjectCard({
   project: Project
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [shouldLoad, setShouldLoad] = useState(false)
 
-  const aspectCSS = getAspectRatioCSS(project.aspectRatio)
   const hasVideo = !!project.previewVideo
+  const aspectCSS = hasVideo
+    ? getMediaAspectCSS(project.slug, "preview")
+    : "16 / 9"
 
   useEffect(() => {
     if (!hasVideo || shouldLoad) return
@@ -35,11 +38,23 @@ export default function ProjectCard({
           observer.disconnect()
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "300px" }
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [hasVideo, shouldLoad])
+
+  const handleLoadedMetadata = useCallback(() => {
+    const video = videoRef.current
+    const container = containerRef.current
+    if (!video || !container) return
+
+    const realW = video.videoWidth
+    const realH = video.videoHeight
+    if (realW > 0 && realH > 0) {
+      container.style.aspectRatio = `${realW} / ${realH}`
+    }
+  }, [])
 
   const activatePreview = useCallback(() => {
     const video = videoRef.current
@@ -75,150 +90,82 @@ export default function ProjectCard({
     <Link
       href={`/projects/${project.slug}`}
       aria-label={`${project.title} — ${project.category} — ${project.year}`}
-      style={{ cursor: "pointer", display: "block" }}
+      className="project-card"
+      onMouseEnter={activatePreview}
+      onMouseLeave={deactivatePreview}
+      onFocus={activatePreview}
+      onBlur={deactivatePreview}
+      tabIndex={0}
     >
       <div
-        className="relative overflow-hidden project-card"
+        ref={containerRef}
+        className="project-card-media"
         style={{
-          borderRadius: "12px",
-          background: project.color,
-          border: "1px solid var(--border)",
-          transform: `scale(${isHovered ? 1.025 : 1})`,
-          transition: `transform 300ms ${hoverEase}`,
-        }}
-        onMouseEnter={activatePreview}
-        onMouseLeave={deactivatePreview}
-        onFocus={activatePreview}
-        onBlur={deactivatePreview}
-        tabIndex={0}
+          aspectRatio: hasVideo ? aspectCSS : "16 / 9",
+          viewTransitionName: `project-${project.slug}`,
+        } as React.CSSProperties}
       >
-        <div
-          className="relative overflow-hidden"
-          style={{
-            aspectRatio: aspectCSS,
-            viewTransitionName: `project-${project.slug}`,
-          } as React.CSSProperties}
-        >
-          {hasVideo && (
-            <video
-              ref={videoRef}
-              src={shouldLoad ? project.previewVideo : undefined}
-              muted
-              loop
-              playsInline
-              preload={shouldLoad ? "metadata" : "none"}
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-              }}
-            />
-          )}
-
-          {!hasVideo && (
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "32px",
-              }}
-            >
-              <div style={{ textAlign: "center" }}>
-                <span
-                  style={{
-                    display: "block",
-                    fontWeight: 700,
-                    marginBottom: "8px",
-                    fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
-                    color: "var(--text-primary)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {project.title}
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 500,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "var(--text-secondary)",
-                  }}
-                >
-                  {project.category}
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div
+        {hasVideo ? (
+          <video
+            ref={videoRef}
+            src={shouldLoad ? project.previewVideo : undefined}
+            muted
+            loop
+            playsInline
+            preload={shouldLoad ? "metadata" : "none"}
+            aria-hidden="true"
+            onLoadedMetadata={handleLoadedMetadata}
             style={{
-              position: "absolute",
-              inset: 0,
-              pointerEvents: "none",
-              opacity: isHovered ? 1 : 0,
-              transition: isHovered
-                ? `opacity 300ms ${hoverEase} 150ms`
-                : `opacity 200ms ${hoverEase}`,
-              background: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 50%)",
+              width: "100%",
+              height: "100%",
+              display: "block",
+              objectFit: "cover",
             }}
           />
-
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              padding: "40px",
-              pointerEvents: "none",
-              opacity: isHovered ? 1 : 0,
-              transform: `translateY(${isHovered ? 0 : "12px"})`,
-              transition: isHovered
-                ? `opacity 300ms ${hoverEase} 150ms, transform 300ms ${hoverEase} 150ms`
-                : `opacity 200ms ${hoverEase}, transform 200ms ${hoverEase}`,
-            }}
-          >
-            <p
-              style={{
-                fontSize: "0.7rem",
-                fontWeight: 500,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
-                marginBottom: "6px",
-              }}
-            >
-              {project.category}
-            </p>
-            <h3
-              style={{
-                fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
-                fontWeight: 600,
-                color: "#ffffff",
-                letterSpacing: "-0.01em",
-                marginBottom: "4px",
-              }}
-            >
+        ) : (
+          <div className="project-card-placeholder">
+            <span className="project-card-placeholder-title">
               {project.title}
-            </h3>
-            <span
-              style={{
-                fontSize: "0.85rem",
-                fontWeight: 400,
-                color: "rgba(255,255,255,0.6)",
-              }}
-            >
-              {project.year}
+            </span>
+            <span className="project-card-placeholder-category">
+              {project.category}
             </span>
           </div>
+        )}
+
+        <div
+          className="project-card-overlay"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            transition: isHovered
+              ? `opacity 300ms ${hoverEase} 120ms`
+              : `opacity 250ms ${hoverEase}`,
+          }}
+        />
+
+        <div
+          className="project-card-info"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            transform: `translateY(${isHovered ? 0 : 10}px)`,
+            transition: isHovered
+              ? `opacity 300ms ${hoverEase} 120ms, transform 300ms ${hoverEase} 120ms`
+              : `opacity 250ms ${hoverEase}, transform 250ms ${hoverEase}`,
+          }}
+        >
+          <p className="project-card-category">{project.category}</p>
+          <h3 className="project-card-title">{project.title}</h3>
+          <span className="project-card-year">{project.year}</span>
         </div>
+      </div>
+
+      <div className="project-card-meta">
+        <div className="project-card-meta-top">
+          <span className="project-card-meta-year">{project.year}</span>
+          <span className="project-card-meta-sep">&mdash;</span>
+          <span className="project-card-meta-category">{project.category}</span>
+        </div>
+        <h3 className="project-card-meta-title">{project.title}</h3>
       </div>
     </Link>
   )

@@ -4,12 +4,24 @@ import { useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import gsap from "gsap"
-import { projects } from "@/data/projects"
+import { projects, getMediaAspectCSS } from "@/data/projects"
 import { useI18n } from "@/lib/i18n-context"
 import { SectionLabel, MediaGrid, MediaCard } from "@/components/MediaComponents"
 
-function VideoPlayer({ src, viewTransitionName }: { src: string; viewTransitionName?: string }) {
+function VideoPlayer({
+  src,
+  slug,
+  type = "hero",
+  viewTransitionName,
+}: {
+  src: string
+  slug?: string
+  type?: string
+  viewTransitionName?: string
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const aspectCSS = slug ? getMediaAspectCSS(slug, type) : undefined
 
   useEffect(() => {
     const video = videoRef.current
@@ -29,13 +41,26 @@ function VideoPlayer({ src, viewTransitionName }: { src: string; viewTransitionN
     return () => observer.disconnect()
   }, [])
 
+  const handleLoadedMetadata = () => {
+    const video = videoRef.current
+    const container = containerRef.current
+    if (!video || !container) return
+    const realW = video.videoWidth
+    const realH = video.videoHeight
+    if (realW > 0 && realH > 0) {
+      container.style.aspectRatio = `${realW} / ${realH}`
+    }
+  }
+
   return (
     <div
+      ref={containerRef}
       style={{
         borderRadius: "12px",
         overflow: "hidden",
         border: "1px solid var(--border)",
         lineHeight: 0,
+        aspectRatio: aspectCSS,
         ...(viewTransitionName ? { viewTransitionName } as React.CSSProperties : {}),
       }}
     >
@@ -46,10 +71,12 @@ function VideoPlayer({ src, viewTransitionName }: { src: string; viewTransitionN
         loop
         playsInline
         preload="metadata"
+        onLoadedMetadata={handleLoadedMetadata}
         style={{
           width: "100%",
-          height: "auto",
+          height: "100%",
           display: "block",
+          objectFit: "cover",
         }}
       />
     </div>
@@ -162,6 +189,8 @@ export default function ProjectContent({ slug }: { slug: string }) {
             <div data-animate-in data-hero>
               <VideoPlayer
                 src={project.heroVideo}
+                slug={project.slug}
+                type="hero"
                 viewTransitionName={`project-${project.slug}`}
               />
             </div>
@@ -261,7 +290,7 @@ export default function ProjectContent({ slug }: { slug: string }) {
               <SectionLabel label={locale === "ru" ? "Дополнительные видео" : "Additional Videos"} />
               <MediaGrid columns="1fr">
                 {project.additionalVideos.map((video, i) => (
-                  <VideoPlayer key={i} src={video} />
+                  <VideoPlayer key={i} src={video} slug={project.slug} type="preview" />
                 ))}
               </MediaGrid>
             </div>

@@ -1,0 +1,51 @@
+{
+  "demiand": {
+    "preview": {
+      "width": 3584,
+      "height": 1632,
+      "ratio": "112:51"
+    }
+  },
+  "dexter": {
+    "preview": {
+      "width": 856,
+      "height": 1072,
+      "ratio": "107:134"
+    }
+  },
+  "jdm": {
+    "preview": {
+      "width": 2160,
+      "height": 1440,
+      "ratio": "3:2"
+    }
+  },
+  "mobile-device": {
+    "preview": {
+      "width": 1440,
+      "height": 1024,
+      "ratio": "45:32"
+    }
+  },
+  "obsidian-oni": {
+    "preview": {
+      "width": 1280,
+      "height": 720,
+      "ratio": "16:9"
+    }
+  },
+  "playrix": {
+    "preview": {
+      "width": 1080,
+      "height": 1920,
+      "ratio": "9:16"
+    }
+  },
+  "trading-platform": {
+    "preview": {
+      "width": 1080,
+      "height": 1920,
+      "ratio": "9:16"
+    }
+  }
+}

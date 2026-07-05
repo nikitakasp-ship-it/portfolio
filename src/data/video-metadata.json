@@ -1,0 +1,44 @@
+{
+  "demiand": {
+    "preview": {
+      "width": 3584,
+      "height": 1632
+    }
+  },
+  "dexter": {
+    "preview": {
+      "width": 856,
+      "height": 1072
+    }
+  },
+  "jdm": {
+    "preview": {
+      "width": 2160,
+      "height": 1440
+    }
+  },
+  "mobile-device": {
+    "preview": {
+      "width": 1440,
+      "height": 1024
+    }
+  },
+  "obsidian-oni": {
+    "preview": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "playrix": {
+    "preview": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "trading-platform": {
+    "preview": {
+      "width": 1080,
+      "height": 1920
+    }
+  }
+}
