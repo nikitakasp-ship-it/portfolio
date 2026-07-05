@@ -113,7 +113,7 @@ export default function ProjectCard({
                 inset: 0,
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                objectFit: "contain",
               }}
             />
           )}

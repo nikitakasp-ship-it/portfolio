@@ -46,7 +46,7 @@ function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; as
         loop
         playsInline
         preload="metadata"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain"
       />
     </div>
   )
@@ -274,7 +274,7 @@ export default function ProjectContent({ slug }: { slug: string }) {
                       src={img}
                       alt={`${project.title} ${i + 1}`}
                       loading="lazy"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </MediaCard>
                 ))}
@@ -297,14 +297,14 @@ export default function ProjectContent({ slug }: { slug: string }) {
                           loop
                           playsInline
                           preload="metadata"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       ) : (
                         <img
                           src={src}
                           alt={`${project.title} BTS ${i + 1}`}
                           loading="lazy"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       )}
                     </MediaCard>
