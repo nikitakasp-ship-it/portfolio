@@ -171,7 +171,7 @@ export default function ProjectPage() {
         </Link>
 
         <div ref={pageRef}>
-          {project.heroVideo ? (
+          {project.heroVideo && (
             <div data-animate-in data-hero>
               <VideoPlayer
                 src={project.heroVideo}
@@ -179,26 +179,7 @@ export default function ProjectPage() {
                 viewTransitionName={`project-${project.slug}`}
               />
             </div>
-          ) : project.cover ? (
-            <div
-              data-animate-in
-              data-hero
-              style={{
-                aspectRatio: getAspectRatioCSS(project.aspectRatio),
-                borderRadius: "12px",
-                overflow: "hidden",
-                border: "1px solid var(--border)",
-                background: project.color,
-                viewTransitionName: `project-${project.slug}`,
-              } as React.CSSProperties}
-            >
-              <img
-                src={project.cover}
-                alt={project.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : null}
+          )}
 
           <div
             data-animate-in

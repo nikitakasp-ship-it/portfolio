@@ -16,19 +16,15 @@ export default function ProjectCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isHovered, setIsHovered] = useState(false)
-  const [coverError, setCoverError] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
 
   const aspectCSS = getAspectRatioCSS(project.aspectRatio)
-  const hasCover = !!project.cover && !coverError
   const hasVideo = !!project.previewVideo
-  const overlayVisible = isHovered && videoReady
 
   const handleMouseEnter = useCallback(() => {
     const video = videoRef.current
     setIsHovered(true)
 
-    if (!video || !videoReady) return
+    if (!video) return
 
     if (activePreviewVideo && activePreviewVideo !== video) {
       activePreviewVideo.pause()
@@ -38,7 +34,7 @@ export default function ProjectCard({
     activePreviewVideo = video
     video.currentTime = 0
     video.play().catch(() => {})
-  }, [videoReady])
+  }, [])
 
   const handleMouseLeave = useCallback(() => {
     const video = videoRef.current
@@ -82,8 +78,7 @@ export default function ProjectCard({
               muted
               loop
               playsInline
-              preload="auto"
-              onCanPlay={() => setVideoReady(true)}
+              preload="metadata"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -94,24 +89,43 @@ export default function ProjectCard({
             />
           )}
 
-          {hasCover && (
-            <img
-              src={project.cover}
-              alt={project.title}
-              loading="lazy"
-              draggable={false}
-              onError={() => setCoverError(true)}
+          {!hasVideo && (
+            <div
               style={{
                 position: "absolute",
                 inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                opacity: overlayVisible ? 0 : 1,
-                transform: `scale(${isHovered ? 1.035 : 1})`,
-                transition: `opacity 300ms ${hoverEase}, transform 300ms ${hoverEase}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "32px",
               }}
-            />
+            >
+              <div style={{ textAlign: "center" }}>
+                <span
+                  style={{
+                    display: "block",
+                    fontWeight: 700,
+                    marginBottom: "8px",
+                    fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
+                    color: "var(--text-primary)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {project.title}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  {project.category}
+                </span>
+              </div>
+            </div>
           )}
 
           <div
@@ -119,8 +133,8 @@ export default function ProjectCard({
               position: "absolute",
               inset: 0,
               pointerEvents: "none",
-              opacity: overlayVisible ? 1 : 0,
-              transition: overlayVisible
+              opacity: isHovered ? 1 : 0,
+              transition: isHovered
                 ? `opacity 300ms ${hoverEase} 150ms`
                 : `opacity 200ms ${hoverEase}`,
               background: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 50%)",
@@ -135,9 +149,9 @@ export default function ProjectCard({
               right: 0,
               padding: "40px",
               pointerEvents: "none",
-              opacity: overlayVisible ? 1 : 0,
-              transform: `translateY(${overlayVisible ? 0 : "12px"})`,
-              transition: overlayVisible
+              opacity: isHovered ? 1 : 0,
+              transform: `translateY(${isHovered ? 0 : "12px"})`,
+              transition: isHovered
                 ? `opacity 300ms ${hoverEase} 150ms, transform 300ms ${hoverEase} 150ms`
                 : `opacity 200ms ${hoverEase}, transform 200ms ${hoverEase}`,
             }}

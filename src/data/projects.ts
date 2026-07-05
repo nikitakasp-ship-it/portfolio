@@ -5,7 +5,6 @@ export interface Project {
   category: string
   year: string
   description: { en: string; ru: string }
-  cover: string
   previewVideo?: string
   heroVideo?: string
   galleryImages: string[]
@@ -49,7 +48,6 @@ export const projects: Project[] = [
       en: "AI-assisted product commercial for kitchen appliances",
       ru: "AI-ассистированный продакшн для кухонной техники",
     },
-    cover: "",
     previewVideo: "/projects/demiand/preview.mp4",
     heroVideo: "/projects/demiand/preview.mp4",
     galleryImages: [],
@@ -73,7 +71,6 @@ export const projects: Project[] = [
       en: "Cinematic character animation project",
       ru: "Кинематографичная анимация персонажа",
     },
-    cover: "",
     previewVideo: "/projects/obsidian-oni/preview.mp4",
     heroVideo: "/projects/obsidian-oni/preview.mp4",
     galleryImages: [],
@@ -91,20 +88,19 @@ export const projects: Project[] = [
     id: "jdm",
     slug: "jdm",
     title: "JDM",
-    category: "Automotive Motion",
+    category: "3D Environment Design • Asset Production",
     year: "2025",
     description: {
-      en: "Automotive motion design project showcasing car culture through dynamic 3D animation, lighting, and cinematic camera work.",
-      ru: "Автомобильный проект, демонстрирующий культуру машин через динамичную 3D-анимацию, освещение и кинематографичную работу камеры.",
+      en: "Creation of cinematic 3D environments and a modular asset library in Cinema 4D for a website dedicated to Japanese drift culture.",
+      ru: "Создание кинематографичных 3D-сред и модульной библиотеки ассетов в Cinema 4D для сайта, посвящённого японской дрифт-культуре.",
     },
-    cover: "",
     previewVideo: "/projects/jdm/preview.mp4",
     heroVideo: "/projects/jdm/preview.mp4",
     galleryImages: [],
     aspectRatio: "21:9",
     overview: {
-      en: "Automotive motion design project showcasing car culture through dynamic 3D animation, lighting, and cinematic camera work.",
-      ru: "Автомобильный проект, демонстрирующий культуру машин через динамичную 3D-анимацию, освещение и кинематографичную работу камеры.",
+      en: "Creation of cinematic 3D environments and a modular asset library in Cinema 4D for a website dedicated to Japanese drift culture. The project focused on building reusable scenes, lighting setups, materials, and atmospheric compositions that reflected the aesthetics of modern JDM motorsport.",
+      ru: "Создание кинематографичных 3D-сред и модульной библиотеки ассетов в Cinema 4D для сайта, посвящённого японской дрифт-культуре. Проект был сосредоточен на создании многоразовых сцен, настроек освещения, материалов и атмосферных композиций, отражающих эстетику современного JDM-автоспорта.",
     },
     credits: "Personal project",
     color: "#1a1a2e",
@@ -121,7 +117,6 @@ export const projects: Project[] = [
       en: "AI digital human / AI avatar project",
       ru: "AI цифровой человек / AI аватар",
     },
-    cover: "",
     previewVideo: "/projects/dexter/preview.mp4",
     heroVideo: "/projects/dexter/preview.mp4",
     galleryImages: [],
@@ -142,7 +137,6 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    cover: "",
     galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
@@ -157,7 +151,6 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    cover: "",
     galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
@@ -172,7 +165,6 @@ export const projects: Project[] = [
     category: "TBD",
     year: "2026",
     description: { en: "", ru: "" },
-    cover: "",
     galleryImages: [],
     aspectRatio: "16:9",
     technologies: [],
