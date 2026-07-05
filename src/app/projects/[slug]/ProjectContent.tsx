@@ -4,11 +4,11 @@ import { useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import gsap from "gsap"
-import { projects, getAspectRatioCSS } from "@/data/projects"
+import { projects } from "@/data/projects"
 import { useI18n } from "@/lib/i18n-context"
 import { SectionLabel, MediaGrid, MediaCard } from "@/components/MediaComponents"
 
-function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; aspectRatio: string; viewTransitionName?: string }) {
+function VideoPlayer({ src, viewTransitionName }: { src: string; viewTransitionName?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
@@ -32,10 +32,10 @@ function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; as
   return (
     <div
       style={{
-        aspectRatio: getAspectRatioCSS(aspectRatio),
         borderRadius: "12px",
         overflow: "hidden",
         border: "1px solid var(--border)",
+        lineHeight: 0,
         ...(viewTransitionName ? { viewTransitionName } as React.CSSProperties : {}),
       }}
     >
@@ -46,7 +46,11 @@ function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; as
         loop
         playsInline
         preload="metadata"
-        className="w-full h-full object-contain"
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "block",
+        }}
       />
     </div>
   )
@@ -158,7 +162,6 @@ export default function ProjectContent({ slug }: { slug: string }) {
             <div data-animate-in data-hero>
               <VideoPlayer
                 src={project.heroVideo}
-                aspectRatio={project.aspectRatio}
                 viewTransitionName={`project-${project.slug}`}
               />
             </div>
@@ -258,7 +261,7 @@ export default function ProjectContent({ slug }: { slug: string }) {
               <SectionLabel label={locale === "ru" ? "Дополнительные видео" : "Additional Videos"} />
               <MediaGrid columns="1fr">
                 {project.additionalVideos.map((video, i) => (
-                  <VideoPlayer key={i} src={video} aspectRatio="16:9" />
+                  <VideoPlayer key={i} src={video} />
                 ))}
               </MediaGrid>
             </div>
