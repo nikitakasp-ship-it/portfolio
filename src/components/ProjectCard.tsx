@@ -15,7 +15,7 @@ export default function ProjectCard({
 
   useScrollAnimation(cardRef, 0, "top 90%")
 
-  const aspect = layoutAspect[project.layout] || "1/1"
+  const aspect = project.videoAspect || layoutAspect[project.layout] || "16/9"
   const minH = layoutMinHeight[project.layout] || "auto"
 
   return (

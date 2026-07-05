@@ -77,7 +77,7 @@ export default function ProjectPage() {
           <div
             className="overflow-hidden mb-20"
             style={{
-              aspectRatio: "16/9",
+              aspectRatio: project.videoAspect || "16/9",
               borderRadius: "12px",
               background: project.color,
               border: "1px solid var(--border)",

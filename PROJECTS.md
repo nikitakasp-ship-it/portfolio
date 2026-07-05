@@ -71,6 +71,7 @@ Open **`src/data/projects.ts`** and add a new object to the `projects` array:
     "/projects/nadi/gallery/01.webp",
   ],
   video: "/projects/nadi/preview.mp4",       // optional — omit if no video
+  videoAspect: "16/9",                       // optional — card adapts to this ratio
   overview: {
     en: "A longer paragraph describing the project in detail. Shown on the project page.",
     ru: "Длинное описание проекта на русском.",
@@ -101,6 +102,7 @@ Open **`src/data/projects.ts`** and add a new object to the `projects` array:
 | `cover`        | yes      | string                   | Path to hero image on project detail page.         |
 | `gallery`      | yes      | string[]                 | Paths to gallery images. Can be `[]`.              |
 | `video`        | no       | string                   | Path to preview video. Replaces `cover` if set.    |
+| `videoAspect`  | no       | string                   | Aspect ratio of the video (e.g. `"16/9"`, `"9/16"`, `"4/3"`, `"1/1"`, `"21/9"`). Card and detail page adapt automatically. Falls back to layout default if not set. |
 | `overview`     | yes      | `{ en: string, ru: string }` | Main description — English and Russian variants.   |
 | `credits`      | no       | string                   | Shown below overview (e.g. "Client: Nike").        |
 | `color`        | yes      | string                   | Hex background color for card and detail hero area.|

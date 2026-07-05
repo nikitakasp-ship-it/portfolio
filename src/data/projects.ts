@@ -11,6 +11,7 @@ export interface Project {
   cover: string
   gallery: string[]
   video?: string
+  videoAspect?: string
   overview: { en: string; ru: string }
   credits?: string
   color: string
@@ -46,6 +47,15 @@ export const colSpan: Record<LayoutType, string> = {
   tall: "span 1",
 }
 
+export const videoAspectColSpan: Record<string, string> = {
+  "21/9": "1 / -1",
+  "16/9": "span 2",
+  "4/3": "span 2",
+  "1/1": "span 1",
+  "3/4": "span 1",
+  "9/16": "span 1",
+}
+
 export const projects: Project[] = [
   {
     id: "demiand",
@@ -65,6 +75,7 @@ export const projects: Project[] = [
       "/projects/demiand/gallery/03.webp",
     ],
     video: "/projects/demiand/preview.mp4",
+    videoAspect: "16/9",
     overview: {
       en: "A recruitment design task exploring AI-assisted production for a kitchen appliance brand. Combining 3D product visualization with AI-generated assets to create a premium commercial spot.",
       ru: "Дизайн-задание на рекрутинге, исследующее AI-ассистированный продакшн для бренда кухонной техники. Сочетание 3D-продакшена и AI-генерации для создания премиального коммерческого ролика.",
