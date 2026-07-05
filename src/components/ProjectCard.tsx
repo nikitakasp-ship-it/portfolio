@@ -158,15 +158,6 @@ export default function ProjectCard({
           <span className="project-card-year">{project.year}</span>
         </div>
       </div>
-
-      <div className="project-card-meta">
-        <div className="project-card-meta-top">
-          <span className="project-card-meta-year">{project.year}</span>
-          <span className="project-card-meta-sep">&mdash;</span>
-          <span className="project-card-meta-category">{project.category}</span>
-        </div>
-        <h3 className="project-card-meta-title">{project.title}</h3>
-      </div>
     </Link>
   )
 }

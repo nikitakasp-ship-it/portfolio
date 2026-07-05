@@ -97,7 +97,6 @@ export const projects: Project[] = [
     color: "#1a2e1a",
     technologies: ["After Effects", "Cinema 4D", "Photoshop", "AI Tools"],
     featured: true,
-    gridPosition: "left",
   },
   {
     id: "mobile-device",
@@ -169,7 +168,6 @@ export const projects: Project[] = [
     color: "#0a1628",
     technologies: ["Cinema 4D", "Redshift", "After Effects"],
     featured: true,
-    gridPosition: "right",
   },
   {
     id: "jdm",

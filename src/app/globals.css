@@ -232,6 +232,8 @@ html {
   overflow: hidden;
   border-radius: 8px;
   line-height: 0;
+  width: 100%;
+  max-height: 720px;
 }
 
 /* Placeholder when no video */
@@ -309,41 +311,4 @@ html {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Card meta — below video */
-.project-card-meta {
-  padding: 16px 0 0;
-}
 
-.project-card-meta-top {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-
-.project-card-meta-year {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.project-card-meta-sep {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.project-card-meta-category {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
-}
-
-.project-card-meta-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: -0.015em;
-  line-height: 1.3;
-}

@@ -9,7 +9,7 @@ export default function ProjectGrid() {
       {featured.map((project) => (
         <div
           key={project.slug}
-          className={`project-grid-item project-grid-item--${project.gridPosition ?? "left"}`}
+          className={`project-grid-item${project.gridPosition ? ` project-grid-item--${project.gridPosition}` : ""}`}
         >
           <ProjectCard project={project} />
         </div>
