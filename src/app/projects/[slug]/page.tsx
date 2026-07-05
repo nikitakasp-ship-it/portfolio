@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { projects, getAspectRatioCSS } from "@/data/projects"
-
-gsap.registerPlugin(ScrollTrigger)
 import { useI18n } from "@/lib/i18n-context"
 
 function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; aspectRatio: string; viewTransitionName?: string }) {
@@ -74,27 +71,66 @@ function SectionLabel({ label }: { label: string }) {
 export default function ProjectPage() {
   const { t, locale } = useI18n()
   const params = useParams()
+  const router = useRouter()
   const project = projects.find((p) => p.slug === params.slug)
+  const pageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const els = document.querySelectorAll("[data-animate-in]")
-    if (!els.length) return
-    gsap.fromTo(
-      els,
-      { opacity: 0, y: 40 },
-      {
+    const hero = document.querySelector("[data-hero]") as HTMLElement | null
+    const content = document.querySelectorAll("[data-animate-in]") as NodeListOf<HTMLElement>
+
+    const tl = gsap.timeline()
+
+    if (hero) {
+      gsap.set(hero, { opacity: 0, scale: 0.88, y: 30 })
+      tl.to(hero, {
         opacity: 1,
+        scale: 1,
         y: 0,
-        duration: 0.9,
-        stagger: 0.15,
+        duration: 0.7,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: els[0].parentElement,
-          start: "top 92%",
+      })
+    }
+
+    if (content.length) {
+      const els = Array.from(content)
+      gsap.set(els, { opacity: 0, y: 30 })
+      tl.to(
+        els,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power3.out",
         },
-      }
-    )
+        "-=0.15"
+      )
+    }
+
+    return () => {
+      tl.kill()
+    }
   }, [project])
+
+  const handleBack = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      if (!pageRef.current) {
+        router.push("/#work")
+        return
+      }
+      gsap.to(pageRef.current, {
+        opacity: 0,
+        y: -20,
+        scale: 0.96,
+        duration: 0.35,
+        ease: "power3.in",
+        onComplete: () => router.push("/#work"),
+      })
+    },
+    [router]
+  )
 
   if (!project) {
     return (
@@ -119,6 +155,8 @@ export default function ProjectPage() {
       <div className="content-container">
         <Link
           href="/#work"
+          prefetch={false}
+          onClick={handleBack}
           style={{
             display: "inline-block",
             fontSize: "0.875rem",
@@ -132,9 +170,9 @@ export default function ProjectPage() {
           &larr; {t("back")}
         </Link>
 
-        <div>
+        <div ref={pageRef}>
           {project.heroVideo ? (
-            <div data-animate-in>
+            <div data-animate-in data-hero>
               <VideoPlayer
                 src={project.heroVideo}
                 aspectRatio={project.aspectRatio}
@@ -144,6 +182,7 @@ export default function ProjectPage() {
           ) : project.cover ? (
             <div
               data-animate-in
+              data-hero
               style={{
                 aspectRatio: getAspectRatioCSS(project.aspectRatio),
                 borderRadius: "12px",
