@@ -50,6 +50,7 @@ function VideoPlayer({
     if (realW > 0 && realH > 0) {
       container.style.aspectRatio = `${realW} / ${realH}`
     }
+    video.currentTime = 0.3
   }
 
   return (
@@ -91,7 +92,7 @@ export default function ProjectContent({ slug }: { slug: string }) {
 
   useEffect(() => {
     const hero = document.querySelector("[data-hero]") as HTMLElement | null
-    const content = document.querySelectorAll("[data-animate-in]") as NodeListOf<HTMLElement>
+    const content = document.querySelectorAll("[data-animate-in]:not([data-hero])") as NodeListOf<HTMLElement>
 
     const tl = gsap.timeline()
 
@@ -206,7 +207,13 @@ export default function ProjectContent({ slug }: { slug: string }) {
               marginBottom: "120px",
             }}
           >
-            <div>
+            <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+            }}
+          >
               <p
                 style={{
                   fontSize: "0.8rem",
@@ -214,7 +221,6 @@ export default function ProjectContent({ slug }: { slug: string }) {
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   color: "var(--text-muted)",
-                  marginBottom: "16px",
                 }}
               >
                 {project.category} &mdash; {project.year}
@@ -226,7 +232,6 @@ export default function ProjectContent({ slug }: { slug: string }) {
                   letterSpacing: "-0.02em",
                   color: "var(--text-primary)",
                   lineHeight: 1.1,
-                  marginBottom: "32px",
                 }}
               >
                 {project.title}

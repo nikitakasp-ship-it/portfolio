@@ -54,6 +54,8 @@ export default function ProjectCard({
     if (realW > 0 && realH > 0) {
       container.style.aspectRatio = `${realW} / ${realH}`
     }
+
+    video.currentTime = 0.3
   }, [])
 
   const activatePreview = useCallback(() => {
