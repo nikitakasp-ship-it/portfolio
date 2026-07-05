@@ -231,7 +231,6 @@ html {
   position: relative;
   overflow: hidden;
   border-radius: 8px;
-  background: var(--surface);
   line-height: 0;
 }
 
