@@ -10,7 +10,7 @@ import { projects, getAspectRatioCSS } from "@/data/projects"
 gsap.registerPlugin(ScrollTrigger)
 import { useI18n } from "@/lib/i18n-context"
 
-function VideoPlayer({ src, aspectRatio }: { src: string; aspectRatio: string }) {
+function VideoPlayer({ src, aspectRatio, viewTransitionName }: { src: string; aspectRatio: string; viewTransitionName?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
@@ -38,6 +38,7 @@ function VideoPlayer({ src, aspectRatio }: { src: string; aspectRatio: string })
         borderRadius: "12px",
         overflow: "hidden",
         border: "1px solid var(--border)",
+        ...(viewTransitionName ? { viewTransitionName } as React.CSSProperties : {}),
       }}
     >
       <video
@@ -134,7 +135,11 @@ export default function ProjectPage() {
         <div>
           {project.heroVideo ? (
             <div data-animate-in>
-              <VideoPlayer src={project.heroVideo} aspectRatio={project.aspectRatio} />
+              <VideoPlayer
+                src={project.heroVideo}
+                aspectRatio={project.aspectRatio}
+                viewTransitionName={`project-${project.slug}`}
+              />
             </div>
           ) : project.cover ? (
             <div
@@ -145,7 +150,8 @@ export default function ProjectPage() {
                 overflow: "hidden",
                 border: "1px solid var(--border)",
                 background: project.color,
-              }}
+                viewTransitionName: `project-${project.slug}`,
+              } as React.CSSProperties}
             >
               <img
                 src={project.cover}

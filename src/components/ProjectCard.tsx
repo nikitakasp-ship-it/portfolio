@@ -79,7 +79,10 @@ export default function ProjectCard({
       >
         <div
           className="relative overflow-hidden"
-          style={{ aspectRatio: aspectCSS }}
+          style={{
+            aspectRatio: aspectCSS,
+            viewTransitionName: `project-${project.slug}`,
+          } as React.CSSProperties}
         >
           {hasCover ? (
             <img
