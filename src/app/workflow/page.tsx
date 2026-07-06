@@ -25,10 +25,9 @@ function StepCard({ number, title, tools }: { number: string; title: string; too
       <div className="grid gap-6 md:gap-12" style={{ gridTemplateColumns: "80px 1fr" }}>
         <div>
           <span
-            className="block font-bold"
+            className="block font-extrabold workflow-step-number"
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              color: "var(--border)",
               letterSpacing: "-0.03em",
               lineHeight: 1,
             }}

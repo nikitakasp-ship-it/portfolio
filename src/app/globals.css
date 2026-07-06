@@ -251,6 +251,20 @@ html {
   }
 }
 
+/* Workflow step numbers */
+.workflow-step-number {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+[data-theme="dark"] .workflow-step-number {
+  opacity: 0.14;
+}
+
+[data-theme="light"] .workflow-step-number {
+  opacity: 0.09;
+}
+
 /* Project Card */
 .project-card {
   display: block;

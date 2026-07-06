@@ -1,9 +1,13 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import Lenis from "lenis"
 
 export default function SmoothScroll() {
+  const lenisRef = useRef<Lenis | null>(null)
+  const pathname = usePathname()
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
@@ -14,6 +18,8 @@ export default function SmoothScroll() {
       smoothWheel: true,
       wheelMultiplier: 0.8,
     })
+
+    lenisRef.current = lenis
 
     let animId: number
     let active = true
@@ -43,8 +49,16 @@ export default function SmoothScroll() {
       cancelAnimationFrame(animId)
       document.removeEventListener("visibilitychange", onVisibility)
       lenis.destroy()
+      lenisRef.current = null
     }
   }, [])
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      lenisRef.current?.scrollTo(0, { immediate: true })
+      window.scrollTo(0, 0)
+    })
+  }, [pathname])
 
   return null
 }
