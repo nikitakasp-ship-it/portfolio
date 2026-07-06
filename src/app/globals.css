@@ -348,6 +348,15 @@ html {
   margin-bottom: 4px;
 }
 
+/* Additional media tiles (MediaSection) */
+.additional-media-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+}
+
 .project-card-year {
   font-size: 0.8rem;
   font-weight: 400;

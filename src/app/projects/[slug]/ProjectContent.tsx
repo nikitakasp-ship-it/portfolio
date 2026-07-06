@@ -7,6 +7,7 @@ import gsap from "gsap"
 import { projects, getMediaAspectCSS } from "@/data/projects"
 import { useI18n } from "@/lib/i18n-context"
 import { SectionLabel, MediaGrid, MediaCard } from "@/components/MediaComponents"
+import MediaSection from "@/components/project-detail/MediaSection"
 
 function VideoPlayer({
   src,
@@ -295,16 +296,11 @@ export default function ProjectContent({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {project.additionalVideos && project.additionalVideos.length > 0 && (
-            <div data-animate-in style={{ marginBottom: "120px" }}>
-              <SectionLabel label={locale === "ru" ? "Дополнительные видео" : "Additional Videos"} />
-              <MediaGrid columns="1fr">
-                {project.additionalVideos.map((video, i) => (
-                  <VideoPlayer key={i} src={video} slug={project.slug} type="preview" />
-                ))}
-              </MediaGrid>
-            </div>
-          )}
+          <MediaSection
+            slug={project.slug}
+            label={locale === "ru" ? "Additional Footage" : "Additional Footage"}
+            videos={project.additionalVideos ?? []}
+          />
 
           {project.galleryImages && project.galleryImages.length > 0 && (
             <div data-animate-in style={{ marginBottom: "120px" }}>

@@ -182,6 +182,7 @@ export const projects: Project[] = [
     previewVideo: "/projects/jdm/preview.mp4",
     heroVideo: "/projects/jdm/preview.mp4",
     galleryImages: [],
+    additionalVideos: [],
     overview: {
       en: "Creation of cinematic 3D environments and a modular asset library in Cinema 4D for a website dedicated to Japanese drift culture. The project focused on building reusable scenes, lighting setups, materials, and atmospheric compositions that reflected the aesthetics of modern JDM motorsport.",
       ru: "Создание кинематографичных 3D-сред и модульной библиотеки ассетов в Cinema 4D для сайта, посвящённого японской дрифт-культуре. Проект был сосредоточен на создании многоразовых сцен, настроек освещения, материалов и атмосферных композиций, отражающих эстетику современного JDM-автоспорта.",

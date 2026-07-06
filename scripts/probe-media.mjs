@@ -142,6 +142,8 @@ function probeImage(filePath) {
 
 // ── Main ────────────────────────────────────────────────────────────────────
 
+const SCAN_SUBDIRS = ["additional", "behind-scenes"]
+
 const ratios = {}
 let detected = 0
 
@@ -149,11 +151,28 @@ for (const dir of readdirSync(PROJECTS_DIR)) {
   const projectDir = join(PROJECTS_DIR, dir)
   if (!existsSync(projectDir)) continue
 
-  const files = readdirSync(projectDir)
-  for (const file of files) {
+  if (!ratios[dir]) ratios[dir] = {}
+
+  // Scan root-level files (preview, hero, etc.)
+  scanFiles(projectDir, "", dir)
+
+  // Scan subdirectories (additional/, behind-scenes/)
+  for (const subdir of SCAN_SUBDIRS) {
+    const subPath = join(projectDir, subdir)
+    if (existsSync(subPath)) {
+      scanFiles(subPath, `${subdir}-`, dir)
+    }
+  }
+}
+
+function scanFiles(directory, keyPrefix, projectSlug) {
+  for (const file of readdirSync(directory)) {
     const ext = extname(file).toLowerCase()
-    const filePath = join(projectDir, file)
+    const filePath = join(directory, file)
     if (!existsSync(filePath)) continue
+
+    // Skip directories
+    if (ext === "") continue
 
     let dims = null
     if (VIDEO_EXTS.has(ext)) {
@@ -164,16 +183,15 @@ for (const dir of readdirSync(PROJECTS_DIR)) {
 
     if (dims) {
       const ratio = normalizeRatio(dims.width, dims.height)
-      if (!ratios[dir]) ratios[dir] = {}
-      // key = filename without extension
-      const key = file.replace(/\.[^.]+$/, "")
-      ratios[dir][key] = {
+      // key = prefix + filename without extension (e.g. "additional-01")
+      const key = keyPrefix + file.replace(/\.[^.]+$/, "")
+      ratios[projectSlug][key] = {
         width: dims.width,
         height: dims.height,
         ratio,
       }
       detected++
-      console.log(`  ${dir}/${file}: ${dims.width}×${dims.height} → ${ratio}`)
+      console.log(`  ${projectSlug}/${key}: ${dims.width}×${dims.height} → ${ratio}`)
     }
   }
 }
