@@ -1,8 +1,15 @@
 import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import LayoutShell from "./LayoutShell"
 import Preloader from "@/components/Preloader"
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  variable: "--font-inter",
+})
 
 const siteUrl = "https://kuspik.vercel.app"
 
@@ -44,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning className={inter.variable}>
       <head>
         <script
           dangerouslySetInnerHTML={{

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import gsap from "gsap"
@@ -21,6 +21,7 @@ function VideoPlayer({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [shouldLoad, setShouldLoad] = useState(false)
   const aspectCSS = slug ? getMediaAspectCSS(slug, type) : undefined
 
   useEffect(() => {
@@ -30,6 +31,7 @@ function VideoPlayer({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          setShouldLoad(true)
           video.play()
         } else {
           video.pause()
@@ -67,14 +69,14 @@ function VideoPlayer({
     >
       <video
         ref={videoRef}
-        src={src}
+        src={shouldLoad ? src : undefined}
         muted
         loop
         playsInline
         disablePictureInPicture
         disableRemotePlayback
         controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
-        preload="metadata"
+        preload={shouldLoad ? "metadata" : "none"}
         onLoadedMetadata={handleLoadedMetadata}
         style={{
           width: "100%",

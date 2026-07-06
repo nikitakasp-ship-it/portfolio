@@ -1,9 +1,4 @@
 @import "tailwindcss";
-@import "@fontsource/inter/300.css";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
 
 :root,
 [data-theme="dark"] {
@@ -54,7 +49,7 @@
   --color-border: var(--border);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
-  --font-sans: "Inter", sans-serif;
+  --font-sans: var(--font-inter);
   --container-content: 1600px;
 }
 

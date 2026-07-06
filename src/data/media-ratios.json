@@ -1,9 +1,9 @@
 {
   "demiand": {
     "preview": {
-      "width": 3584,
-      "height": 1632,
-      "ratio": "112:51"
+      "width": 1920,
+      "height": 874,
+      "ratio": "960:437"
     }
   },
   "dexter": {
@@ -15,8 +15,8 @@
   },
   "jdm": {
     "preview": {
-      "width": 2160,
-      "height": 1440,
+      "width": 1920,
+      "height": 1280,
       "ratio": "3:2"
     }
   },
