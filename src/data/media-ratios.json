@@ -18,6 +18,21 @@
       "width": 1920,
       "height": 1280,
       "ratio": "3:2"
+    },
+    "additional-01": {
+      "width": 960,
+      "height": 640,
+      "ratio": "3:2"
+    },
+    "additional-02": {
+      "width": 960,
+      "height": 960,
+      "ratio": "1:1"
+    },
+    "additional-03": {
+      "width": 960,
+      "height": 960,
+      "ratio": "1:1"
     }
   },
   "mobile-device": {

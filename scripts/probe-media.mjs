@@ -124,8 +124,175 @@ function probeVideoMp4(filePath) {
   return null
 }
 
+// ── WebM / Matroska (EBML) dimension parser ──────────────────────────────────
+
+const EBML_CLUSTER = 0x1F43B675
+const EBML_VIDEO = 0xE0
+const EBML_PIXEL_WIDTH = 0xB0
+const EBML_PIXEL_HEIGHT = 0xBA
+const EBML_TRACK_ENTRY = 0xAE
+const EBML_TRACKS = 0x1654AE6B
+const EBML_SEGMENT = 0x18538067
+
+function readEbmlVarInt(buf, off) {
+  const first = buf.readUInt8(off)
+  let len = 0
+  let mask = 0x80
+  while (mask > 0 && !(first & mask)) {
+    mask >>= 1
+    len++
+  }
+  if (mask === 0 || len > 7) return null
+  let val = first & ~mask
+  for (let i = 1; i <= len; i++) {
+    val = (val << 8) | buf.readUInt8(off + i)
+  }
+  return { length: len + 1, value: val }
+}
+
+function readEbmlElementId(buf, off) {
+  const first = buf.readUInt8(off)
+  if (first === 0) return null // invalid: no leading 1 bit
+  let len = 0
+  let mask = 0x80
+  while (mask > 0 && !(first & mask)) {
+    mask >>= 1
+    len++
+  }
+  if (mask === 0) return null
+  return len + 1
+}
+
+// Skip past one EBML element (header + data). Returns the offset after the element, or null on failure.
+function skipEbmlElement(buf, off, end) {
+  if (off >= end) return null
+  const idLen = readEbmlElementId(buf, off)
+  if (!idLen || off + idLen >= end) return null
+  off += idLen
+  const size = readEbmlVarInt(buf, off)
+  if (!size || off + size.length >= end) return null
+  off += size.length
+  const dataEnd = off + size.value
+  if (dataEnd > end) return null
+  return dataEnd
+}
+
+function probeVideoWebm(filePath) {
+  try {
+    const buf = readFileSync(filePath)
+    if (buf.readUInt8(0) !== 0x1A) return null
+
+    const len = buf.length
+
+    let off = 0
+    while (off < len) {
+      const idLen = readEbmlElementId(buf, off)
+      if (!idLen) { off++; continue }
+      const id = buf.readUIntBE(off, idLen)
+      off += idLen
+      if (off >= len) break
+      const size = readEbmlVarInt(buf, off)
+      if (!size) break
+      off += size.length
+      const dataEnd = off + size.value
+      if (dataEnd > len) break
+
+      if (id === EBML_SEGMENT) {
+        let soff = off
+        while (soff < dataEnd) {
+          const sidLen = readEbmlElementId(buf, soff)
+          if (!sidLen) { soff++; continue }
+          const sid = buf.readUIntBE(soff, sidLen)
+          if (sid === EBML_CLUSTER) break
+          soff += sidLen
+          if (soff >= dataEnd) break
+          const ssize = readEbmlVarInt(buf, soff)
+          if (!ssize) break
+          soff += ssize.length
+          const sdataEnd = soff + ssize.value
+          if (sdataEnd > dataEnd) break
+
+          if (sid === EBML_TRACKS) {
+            let toff = soff
+            while (toff < sdataEnd) {
+              const tidLen = readEbmlElementId(buf, toff)
+              if (!tidLen) { toff++; continue }
+              const tid = buf.readUIntBE(toff, tidLen)
+              toff += tidLen
+              if (toff >= sdataEnd) break
+              const tsize = readEbmlVarInt(buf, toff)
+              if (!tsize) break
+              toff += tsize.length
+              const tdataEnd = toff + tsize.value
+              if (tdataEnd > sdataEnd) break
+
+              if (tid === EBML_TRACK_ENTRY) {
+                let eoff = toff
+                let trackType = -1
+                let pixelWidth = -1
+                let pixelHeight = -1
+
+                while (eoff < tdataEnd) {
+                  const eidLen = readEbmlElementId(buf, eoff)
+                  if (!eidLen) { eoff++; continue }
+                  const eid = buf.readUIntBE(eoff, eidLen)
+                  eoff += eidLen
+                  if (eoff >= tdataEnd) break
+                  const esize = readEbmlVarInt(buf, eoff)
+                  if (!esize) break
+                  eoff += esize.length
+                  const edataEnd = eoff + esize.value
+                  if (edataEnd > tdataEnd) break
+
+                  if (eid === 0x83 && esize.value === 1) {
+                    trackType = buf.readUInt8(eoff)
+                  } else if (eid === EBML_VIDEO) {
+                    let voff = eoff
+                    while (voff < edataEnd) {
+                      const vidLen = readEbmlElementId(buf, voff)
+                      if (!vidLen) { voff++; continue }
+                      const vid = buf.readUIntBE(voff, vidLen)
+                      voff += vidLen
+                      if (voff >= edataEnd) break
+                      const vsize = readEbmlVarInt(buf, voff)
+                      if (!vsize) break
+                      voff += vsize.length
+                      const vdataEnd = voff + vsize.value
+                      if (vdataEnd > edataEnd) break
+
+                      if (vid === EBML_PIXEL_WIDTH && vsize.value <= 4) {
+                        pixelWidth = buf.readUIntBE(voff, vsize.value)
+                      } else if (vid === EBML_PIXEL_HEIGHT && vsize.value <= 4) {
+                        pixelHeight = buf.readUIntBE(voff, vsize.value)
+                      }
+                      voff = vdataEnd
+                    }
+                  }
+
+                  eoff = edataEnd
+                }
+
+                if (trackType === 1 && pixelWidth > 0 && pixelHeight > 0) {
+                  return { width: pixelWidth, height: pixelHeight }
+                }
+              }
+
+              toff = tdataEnd
+            }
+          }
+
+          soff = sdataEnd
+        }
+      }
+
+      off = dataEnd
+    }
+  } catch { /* skip */ }
+  return null
+}
+
 function probeVideo(filePath) {
-  return probeVideoFfprobe(filePath) || probeVideoMp4(filePath)
+  return probeVideoFfprobe(filePath) || probeVideoMp4(filePath) || probeVideoWebm(filePath)
 }
 
 // ── Image dimensions via image-size ─────────────────────────────────────────
