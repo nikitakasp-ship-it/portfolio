@@ -45,6 +45,12 @@ function AdditionalVideoTile({
   }, [])
 
   useEffect(() => {
+    if (shouldLoad && videoRef.current) {
+      videoRef.current.load()
+    }
+  }, [shouldLoad])
+
+  useEffect(() => {
     const video = videoRef.current
     if (!video || !shouldLoad) return
     if (isInView && shouldAutoplay()) requestPlay(video)
