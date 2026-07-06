@@ -99,9 +99,29 @@ button {
   background: rgba(0, 0, 0, 0.1);
 }
 
+.nav-link {
+  letter-spacing: 0.03em;
+}
+
 .nav-link:hover,
 .contact-link:hover {
   color: var(--text-hover) !important;
+}
+
+.theme-toggle {
+  border: 1.5px solid var(--text-muted);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--text-primary);
+  background-color: var(--surface);
 }
 
 @media (prefers-reduced-motion: reduce) {

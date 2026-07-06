@@ -8,7 +8,7 @@ export default function ThemeSwitcher({ className = "" }: { className?: string }
   return (
     <button
       onClick={toggle}
-      className={`transition-colors duration-300 ${className}`}
+      className={`theme-toggle transition-colors duration-300 ${className}`}
       style={{ color: "var(--text-muted)" }}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
     >
