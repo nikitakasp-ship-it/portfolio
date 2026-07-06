@@ -148,6 +148,24 @@ button {
   animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  pointer-events: auto;
+}
+
+.preloader-mark {
+  font-size: clamp(4rem, 12vw, 9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

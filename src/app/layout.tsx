@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "./providers"
 import LayoutShell from "./LayoutShell"
+import Preloader from "@/components/Preloader"
 
 const siteUrl = "https://kuspik.vercel.app"
 
@@ -52,6 +53,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Preloader />
         <a
           href="#main-content"
           className="fixed -top-full left-4 z-[100] px-4 py-2 text-sm transition-all focus:top-4"
