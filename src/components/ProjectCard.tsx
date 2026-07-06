@@ -98,6 +98,9 @@ export default function ProjectCard({
             muted
             loop
             playsInline
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
             preload={shouldLoad ? "metadata" : "none"}
             aria-hidden="true"
             onLoadedMetadata={handleLoadedMetadata}

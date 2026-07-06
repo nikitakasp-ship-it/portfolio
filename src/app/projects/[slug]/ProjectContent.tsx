@@ -71,6 +71,9 @@ function VideoPlayer({
         muted
         loop
         playsInline
+        disablePictureInPicture
+        disableRemotePlayback
+        controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
         preload="metadata"
         onLoadedMetadata={handleLoadedMetadata}
         style={{
@@ -333,6 +336,9 @@ export default function ProjectContent({ slug }: { slug: string }) {
                           muted
                           loop
                           playsInline
+                          disablePictureInPicture
+                          disableRemotePlayback
+                          controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                           preload="metadata"
                           className="w-full h-full object-contain"
                         />
