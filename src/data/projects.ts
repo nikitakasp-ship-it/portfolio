@@ -192,9 +192,9 @@ export const projects: Project[] = [
     featured: true,
     gridPosition: "full",
     additionalVideos: [
-      "/projects/jdm/additional/01.webm",
-      "/projects/jdm/additional/02.webm",
-      "/projects/jdm/additional/03.webm",
+      "/projects/jdm/additional/01.mp4",
+      "/projects/jdm/additional/02.mp4",
+      "/projects/jdm/additional/03.mp4",
     ],
   },
   {

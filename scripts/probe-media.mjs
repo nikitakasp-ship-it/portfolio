@@ -333,6 +333,8 @@ for (const dir of readdirSync(PROJECTS_DIR)) {
 }
 
 function scanFiles(directory, keyPrefix, projectSlug) {
+  // Collect all seen keys to skip duplicates (same name, different ext)
+  const seenKeys = new Set(Object.keys(ratios[projectSlug] || {}).filter(k => k.startsWith(keyPrefix) && k !== keyPrefix.replace(/-$/, "")))
   for (const file of readdirSync(directory)) {
     const ext = extname(file).toLowerCase()
     const filePath = join(directory, file)
@@ -350,8 +352,9 @@ function scanFiles(directory, keyPrefix, projectSlug) {
 
     if (dims) {
       const ratio = normalizeRatio(dims.width, dims.height)
-      // key = prefix + filename without extension (e.g. "additional-01")
       const key = keyPrefix + file.replace(/\.[^.]+$/, "")
+      if (seenKeys.has(key)) continue
+      seenKeys.add(key)
       ratios[projectSlug][key] = {
         width: dims.width,
         height: dims.height,

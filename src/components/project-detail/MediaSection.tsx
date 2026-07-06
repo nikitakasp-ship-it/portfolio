@@ -4,6 +4,13 @@ import { useRef, useState, useEffect, useCallback } from "react"
 import { requestPlay, releasePlay, shouldAutoplay } from "@/lib/video-play-manager"
 import { getMediaAspectCSS } from "@/data/projects"
 
+function webmSrc(mp4Src: string): string | undefined {
+  if (mp4Src.endsWith(".mp4")) {
+    return mp4Src.slice(0, -4) + ".webm"
+  }
+  return undefined
+}
+
 function AdditionalVideoTile({
   slug,
   src,
@@ -21,6 +28,7 @@ function AdditionalVideoTile({
     slug,
     `additional-${String(index + 1).padStart(2, "0")}`
   )
+  const webm = webmSrc(src)
 
   useEffect(() => {
     const el = containerRef.current
@@ -60,7 +68,6 @@ function AdditionalVideoTile({
     >
       <video
         ref={videoRef}
-        src={shouldLoad ? src : undefined}
         muted
         loop
         playsInline
@@ -75,7 +82,14 @@ function AdditionalVideoTile({
           objectFit: "cover",
           display: "block",
         }}
-      />
+      >
+        {shouldLoad && webm && (
+          <source src={webm} type="video/webm" />
+        )}
+        {shouldLoad && (
+          <source src={src} type="video/mp4" />
+        )}
+      </video>
     </div>
   )
 }
