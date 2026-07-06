@@ -5,10 +5,9 @@ import Link from "next/link"
 import type { Project } from "@/data/projects"
 import { getMediaAspectCSS } from "@/data/projects"
 import { easings } from "@/lib/motion"
+import { requestPlay, releasePlay, shouldAutoplay } from "@/lib/video-play-manager"
 
 const hoverEase = easings.hover
-
-let activePreviewVideo: HTMLVideoElement | null = null
 
 export default function ProjectCard({
   project,
@@ -19,6 +18,7 @@ export default function ProjectCard({
   const containerRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [shouldLoad, setShouldLoad] = useState(false)
+  const [isInView, setIsInView] = useState(false)
 
   const hasVideo = !!project.previewVideo
   const aspectCSS = hasVideo
@@ -26,23 +26,34 @@ export default function ProjectCard({
     : "16 / 9"
 
   useEffect(() => {
-    if (!hasVideo || shouldLoad) return
+    if (!hasVideo) return
 
     const el = videoRef.current?.parentElement
     if (!el) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true)
-          observer.disconnect()
-        }
+        setIsInView(entry.isIntersecting)
+        if (entry.isIntersecting) setShouldLoad(true)
       },
-      { rootMargin: "300px" }
+      { threshold: 0.4, rootMargin: "100px" }
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [hasVideo, shouldLoad])
+  }, [hasVideo])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !shouldLoad) return
+
+    if (isInView && shouldAutoplay()) {
+      requestPlay(video)
+    } else {
+      releasePlay(video)
+    }
+
+    return () => releasePlay(video)
+  }, [isInView, shouldLoad])
 
   const handleLoadedMetadata = useCallback(() => {
     const video = videoRef.current
@@ -58,35 +69,8 @@ export default function ProjectCard({
     video.currentTime = 0.3
   }, [])
 
-  const activatePreview = useCallback(() => {
-    const video = videoRef.current
-    setIsHovered(true)
-
-    if (!video) return
-
-    if (activePreviewVideo && activePreviewVideo !== video) {
-      activePreviewVideo.pause()
-      activePreviewVideo.currentTime = 0
-    }
-
-    activePreviewVideo = video
-    video.currentTime = 0
-    video.play().catch(() => {})
-  }, [])
-
-  const deactivatePreview = useCallback(() => {
-    const video = videoRef.current
-    setIsHovered(false)
-
-    if (!video) return
-
-    video.pause()
-    video.currentTime = 0
-
-    if (activePreviewVideo === video) {
-      activePreviewVideo = null
-    }
-  }, [])
+  const activatePreview = useCallback(() => setIsHovered(true), [])
+  const deactivatePreview = useCallback(() => setIsHovered(false), [])
 
   return (
     <Link
